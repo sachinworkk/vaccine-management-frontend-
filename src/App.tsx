@@ -2,14 +2,16 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 
-import LoginPage from "./pages/Login";
-import VaccineDashboard from "./pages/VaccineDashboard";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import VaccineDashboardPage from "./pages/VaccineDashboardPage";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />}></Route>
-      <Route path="/vaccines" element={<VaccineDashboard />}></Route>
+      <Route path="/signup" element={<SignUpPage />}></Route>
+      <Route path="/dashboard" element={<VaccineDashboardPage />}></Route>
     </Routes>
   );
 }
