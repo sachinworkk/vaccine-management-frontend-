@@ -7,8 +7,8 @@ import {
   Button,
   Heading,
   FormLabel,
-  FormControl,
   RadioGroup,
+  FormControl,
 } from "@chakra-ui/react";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 
@@ -21,7 +21,7 @@ function SignUpForm() {
         </Box>
 
         <Box my={4} textAlign="left">
-          <form>
+          <Stack spacing={4}>
             <FormControl>
               <FormLabel>Full Name</FormLabel>
               <Input type="name" placeholder="Please enter full name" />
@@ -39,7 +39,7 @@ function SignUpForm() {
             </FormControl>
 
             <FormControl>
-              <FormLabel>Date</FormLabel>
+              <FormLabel>Date Of Birth</FormLabel>
 
               <SingleDatepicker name="date-input" onDateChange={() => {}} />
             </FormControl>
@@ -54,19 +54,19 @@ function SignUpForm() {
               <Input type="email" placeholder="Please enter email address" />
             </FormControl>
 
-            <FormControl mt={6}>
+            <FormControl>
               <FormLabel>Password</FormLabel>
               <Input type="password" placeholder="Please enter password" />
             </FormControl>
 
-            <FormControl mt={6}>
+            <FormControl>
               <FormLabel>Confirm Password</FormLabel>
               <Input type="password" placeholder="Please enter password" />
             </FormControl>
-            <Button width="full" mt={8} type="submit">
-              Sign Up
-            </Button>
-          </form>
+          </Stack>
+          <Button width="full" mt={8} type="submit">
+            Sign Up
+          </Button>
         </Box>
       </Box>
     </Flex>

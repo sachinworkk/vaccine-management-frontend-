@@ -3,6 +3,7 @@ import {
   Flex,
   Link,
   Input,
+  Stack,
   Button,
   Heading,
   FormLabel,
@@ -25,7 +26,7 @@ function LoginForm() {
         </Box>
 
         <Box my={4} textAlign="left">
-          <form>
+          <Stack spacing={4}>
             <FormControl>
               <FormLabel>Email</FormLabel>
               <Input type="email" placeholder="Please enter email address" />
@@ -38,7 +39,7 @@ function LoginForm() {
             <Button width="full" mt={8} type="submit">
               Sign In
             </Button>
-          </form>
+          </Stack>
 
           <Box mt={4}>
             Don't have an account?{" "}
