@@ -40,7 +40,6 @@ function SignUpForm() {
 
             <FormControl>
               <FormLabel>Date Of Birth</FormLabel>
-
               <SingleDatepicker name="date-input" onDateChange={() => {}} />
             </FormControl>
 
