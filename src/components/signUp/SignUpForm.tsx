@@ -1,74 +1,175 @@
 import {
   Box,
-  Flex,
+  Link,
   Input,
   Stack,
   Radio,
+  Center,
   Button,
   Heading,
   FormLabel,
   RadioGroup,
   FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
-import { SingleDatepicker } from "chakra-dayzed-datepicker";
+
+import { Controller, useForm } from "react-hook-form";
+
+import * as routes from "../../routes/routes";
+
+import { UserSignUp } from "../../types/userSingUp";
+
+import { useAppDispatch } from "../hooks/hooks";
+
+import { signUpUser } from "../../features/user/userAuthSlice";
 
 function SignUpForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm();
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (data: UserSignUp) => dispatch(signUpUser(data));
+
   return (
-    <Flex width="full">
-      <Box p={8} borderWidth={1} borderRadius={8} boxShadow="lg">
-        <Box textAlign="center">
-          <Heading>Sign Up</Heading>
-        </Box>
+    <Box p={8} minWidth="400px" borderWidth={1} borderRadius={8} boxShadow="lg">
+      <Center>
+        <Heading as="h1" size={{ md: "lg", lg: "lg", base: "md", sm: "md" }}>
+          Sign Up
+        </Heading>
+      </Center>
 
+      <form onSubmit={handleSubmit((data) => onSubmit(data as UserSignUp))}>
         <Box my={4} textAlign="left">
-          <Stack spacing={4}>
-            <FormControl>
+          <Stack spacing={6}>
+            <FormControl isInvalid={Boolean(errors.name)}>
               <FormLabel>Full Name</FormLabel>
-              <Input type="name" placeholder="Please enter full name" />
+              <Input
+                type="name"
+                placeholder="Please enter full name"
+                {...register("name", {
+                  required: "Name is required",
+                })}
+              />
+
+              <FormErrorMessage>
+                {errors.name && errors.name.message?.toString()}
+              </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
-              <FormLabel>Gender</FormLabel>
-              <RadioGroup>
-                <Stack direction="row">
-                  <Radio value="1">Male</Radio>
-                  <Radio value="2">Female</Radio>
-                  <Radio value="3">Other</Radio>
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+            <FormLabel>Gender</FormLabel>
+            <Controller
+              name="gender"
+              control={control}
+              rules={{ required: "Gender is required" }}
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={Boolean(errors.gender)}>
+                  <RadioGroup onChange={onChange} value={value}>
+                    <Stack direction="row">
+                      <Radio value="male">Male</Radio>
+                      <Radio value="female">Female</Radio>
+                      <Radio value="other">Other</Radio>
+                    </Stack>
+                  </RadioGroup>
+                  <FormErrorMessage>
+                    {errors.gender && errors.gender.message?.toString()}
+                  </FormErrorMessage>
+                </FormControl>
+              )}
+            ></Controller>
 
-            <FormControl>
+            <FormControl isInvalid={Boolean(errors.dateOfBirth)}>
               <FormLabel>Date Of Birth</FormLabel>
-              <SingleDatepicker name="date-input" onDateChange={() => {}} />
+              <Input
+                size="md"
+                type="date"
+                {...register("dateOfBirth", {
+                  required: "Date of birth is required",
+                })}
+              />
+
+              <FormErrorMessage>
+                {errors.date && errors.date.message?.toString()}
+              </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={Boolean(errors.address)}>
               <FormLabel>Address</FormLabel>
-              <Input type="address" placeholder="Please enter address" />
+              <Input
+                type="address"
+                placeholder="Please enter address"
+                {...register("address", {
+                  required: "Address is required",
+                })}
+              />
+
+              <FormErrorMessage>
+                {errors.address && errors.address.message?.toString()}
+              </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={Boolean(errors.email)}>
               <FormLabel>Email</FormLabel>
-              <Input type="email" placeholder="Please enter email address" />
+              <Input
+                type="email"
+                placeholder="Please enter email address"
+                {...register("email", {
+                  required: "Email Address is required",
+                })}
+              />
+
+              <FormErrorMessage>
+                {errors.email && errors.email.message?.toString()}
+              </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={Boolean(errors.password)}>
               <FormLabel>Password</FormLabel>
-              <Input type="password" placeholder="Please enter password" />
+              <Input
+                type="password"
+                placeholder="Please enter password"
+                {...register("password", {
+                  required: "Password is required",
+                })}
+              />
+
+              <FormErrorMessage>
+                {errors.password && errors.password.message?.toString()}
+              </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={Boolean(errors.confirmPassword)}>
               <FormLabel>Confirm Password</FormLabel>
-              <Input type="password" placeholder="Please enter password" />
+              <Input
+                type="password"
+                placeholder="Please enter password"
+                {...register("confirmPassword", {
+                  required: "Password is required",
+                })}
+              />
+
+              <FormErrorMessage>
+                {errors.confirmPassword &&
+                  errors.confirmPassword.message?.toString()}
+              </FormErrorMessage>
             </FormControl>
           </Stack>
           <Button width="full" mt={8} type="submit">
             Sign Up
           </Button>
+          <Box mt={4}>
+            Already have an account?{" "}
+            <Link color="teal.500" href={routes.SIGN_IN}>
+              Sign In
+            </Link>
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </form>
+    </Box>
   );
 }
 
