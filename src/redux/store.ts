@@ -1,9 +1,12 @@
 import { authReducer } from "./../features/user/userAuthSlice";
+import { vaccineReducer } from "./../features/vaccine/vaccineSlice";
+
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    vaccine: vaccineReducer,
   },
 });
 

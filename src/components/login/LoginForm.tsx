@@ -22,7 +22,7 @@ import * as routes from "../../routes/routes";
 
 import { UserLogin } from "../../types/userLogin";
 
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import { loginUser, clearState } from "../../features/user/userAuthSlice";
 

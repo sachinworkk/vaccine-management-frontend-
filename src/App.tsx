@@ -7,7 +7,8 @@ import store from "./redux/store";
 
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-import VaccineDashboardPage from "./pages/VaccineDashboardPage";
+import VaccinePage from "./pages/VaccinPage";
+import Dashboard from "./components/dashboard/Dashboard";
 
 import * as routes from "./routes/routes";
 
@@ -17,10 +18,8 @@ function App() {
       <Routes>
         <Route path={routes.SIGN_IN} element={<LoginPage />}></Route>
         <Route path={routes.SIGN_UP} element={<SignUpPage />}></Route>
-        <Route
-          path={routes.DASHBOARD}
-          element={<VaccineDashboardPage />}
-        ></Route>
+        <Route path={routes.DASHBOARD} element={<Dashboard />}></Route>
+        <Route path={routes.VACCINE} element={<VaccinePage />}></Route>
       </Routes>
     </Provider>
   );

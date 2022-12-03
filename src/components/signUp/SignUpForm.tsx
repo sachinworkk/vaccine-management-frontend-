@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import {
   Box,
   Link,
@@ -12,18 +14,25 @@ import {
   FormControl,
   FormErrorMessage,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 
 import { Controller, useForm } from "react-hook-form";
+
+import { useNavigate } from "react-router-dom";
 
 import * as routes from "../../routes/routes";
 
 import { UserSignUp } from "../../types/userSingUp";
 
-import { useAppDispatch } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
-import { signUpUser } from "../../features/user/userAuthSlice";
+import { signUpUser, clearState } from "../../features/user/userAuthSlice";
 
 function SignUpForm() {
+  const toast = useToast();
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -33,7 +42,33 @@ function SignUpForm() {
 
   const dispatch = useAppDispatch();
 
+  const { user, isLoginSuccess, error } = useAppSelector((state) => state.auth);
+
   const onSubmit = (data: UserSignUp) => dispatch(signUpUser(data));
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: error,
+        status: "error",
+        isClosable: true,
+      });
+
+      dispatch(clearState());
+    }
+
+    if (isLoginSuccess) {
+      toast({
+        title: "User successfully registered",
+        status: "success",
+        isClosable: true,
+      });
+
+      dispatch(clearState());
+
+      navigate(routes.DASHBOARD);
+    }
+  }, [user, error, isLoginSuccess]);
 
   return (
     <Box p={8} minWidth="400px" borderWidth={1} borderRadius={8} boxShadow="lg">
@@ -61,13 +96,14 @@ function SignUpForm() {
               </FormErrorMessage>
             </FormControl>
 
-            <FormLabel>Gender</FormLabel>
             <Controller
               name="gender"
               control={control}
               rules={{ required: "Gender is required" }}
               render={({ field: { onChange, value } }) => (
                 <FormControl isInvalid={Boolean(errors.gender)}>
+                  <FormLabel>Gender</FormLabel>
+
                   <RadioGroup onChange={onChange} value={value}>
                     <Stack direction="row">
                       <Radio value="male">Male</Radio>
