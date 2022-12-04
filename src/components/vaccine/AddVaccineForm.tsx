@@ -44,7 +44,7 @@ function AddVaccineForm(props: any) {
           <ModalBody>
             <form
               id="add-vaccine-form"
-              onSubmit={handleSubmit((data) => console.log(data))}
+              onSubmit={handleSubmit((data) => props.onSubmit(data))}
             >
               <Box p={4} display="flex" flexDirection="column" gap="16px">
                 <FormControl isInvalid={Boolean(errors.name)}>
@@ -73,9 +73,15 @@ function AddVaccineForm(props: any) {
                         onChange={onChange}
                         placeholder="Select option"
                       >
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
+                        <option value="Exploratory">Exploratory</option>
+                        <option value="Preclinical">Preclinical</option>
+                        <option value="Clinical development">
+                          Clinical development
+                        </option>
+                        <option value="Approval">Approval</option>
+                        <option value="Pharmacovigilance">
+                          Pharmacovigilance
+                        </option>
                       </Select>
                       <FormErrorMessage>
                         {errors.stage && errors.stage.message?.toString()}
@@ -146,9 +152,17 @@ function AddVaccineForm(props: any) {
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl>
-                  <Checkbox name="isMandatory">Is mandatory</Checkbox>
-                </FormControl>
+                <Controller
+                  name="isMandatory"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <FormControl>
+                      <Checkbox onChange={onChange} isChecked={value}>
+                        Is mandatory
+                      </Checkbox>
+                    </FormControl>
+                  )}
+                ></Controller>
               </Box>
             </form>
           </ModalBody>

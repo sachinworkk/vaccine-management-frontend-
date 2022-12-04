@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getVaccinesThunk } from "./vaccineThunk";
+import { getVaccinesThunk, postVaccineThunk } from "./vaccineThunk";
 
 export const getVaccines = createAsyncThunk(
   "vaccine/getVaccines",
   getVaccinesThunk
+);
+
+export const postVaccine = createAsyncThunk(
+  "vaccine/postVaccine",
+  postVaccineThunk
 );
 
 const initialState = {
@@ -30,6 +35,17 @@ const vaccineSlice = createSlice({
     });
     builder.addCase(getVaccines.pending, (state: any) => {
       state.isLoading = true;
+    });
+    builder.addCase(postVaccine.pending, (state: any) => {
+      state.isLoading = true;
+    });
+    builder.addCase(postVaccine.fulfilled, (state: any, { payload }) => {
+      state.isLoading = false;
+    });
+    builder.addCase(postVaccine.rejected, (state: any, { payload }: any) => {
+      state.isLoading = false;
+
+      state.error = payload.data.details;
     });
   },
 });

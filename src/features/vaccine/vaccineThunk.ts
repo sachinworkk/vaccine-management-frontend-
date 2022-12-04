@@ -1,4 +1,4 @@
-import { getVaccines } from "./../../services/vaccineService";
+import { getVaccines, postVaccine } from "./../../services/vaccineService";
 
 export const getVaccinesThunk = async ({}, { rejectWithValue }: any) => {
   try {
@@ -7,5 +7,18 @@ export const getVaccinesThunk = async ({}, { rejectWithValue }: any) => {
     return resp;
   } catch (error: any) {
     return rejectWithValue(error);
+  }
+};
+
+export const postVaccineThunk = async (
+  payload: any,
+  { rejectWithValue }: any
+) => {
+  try {
+    const resp = await postVaccine(payload);
+
+    return resp;
+  } catch (error: any) {
+    return rejectWithValue(error.response);
   }
 };
