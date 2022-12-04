@@ -1,6 +1,7 @@
 import { loginUserThunk, signUpUserThunk } from "./userThunk";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
 
 const initialState = {
   user: {
@@ -59,6 +60,9 @@ const userAuthSlice = createSlice({
       state.isLoading = false;
       state.user = user;
       state.isLoginSuccess = true;
+
+      saveAccessToken(payload.data.accessToken);
+      saveRefreshToken(payload.data.refreshToken);
     });
     builder.addCase(loginUser.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
