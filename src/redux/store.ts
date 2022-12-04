@@ -1,13 +1,15 @@
 import { authReducer } from "./../features/user/userAuthSlice";
 import { vaccineReducer } from "./../features/vaccine/vaccineSlice";
 
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+
+export const allReducers = combineReducers({
+  auth: authReducer,
+  vaccine: vaccineReducer,
+});
 
 const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    vaccine: vaccineReducer,
-  },
+  reducer: allReducers,
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

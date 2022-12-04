@@ -25,6 +25,7 @@ import { UserLogin } from "../../types/userLogin";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import { loginUser, clearState } from "../../features/user/userAuthSlice";
+import { saveAccessToken } from "../../utils/localStorage";
 
 function LoginForm() {
   const toast = useToast();
@@ -39,11 +40,13 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
-  const { user, isLoading, isLoginSuccess, error } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, isLoading, error } = useAppSelector((state) => state.auth);
 
-  const onSubmit = (data: UserLogin) => dispatch(loginUser(data));
+  const onSubmit = (data: UserLogin) =>
+    dispatch(loginUser(data)).then((response) => {
+      console.log({ response });
+      navigate("/dashboard");
+    });
 
   useEffect(() => {
     if (error) {
@@ -52,16 +55,9 @@ function LoginForm() {
         status: "error",
         isClosable: true,
       });
-
       dispatch(clearState());
     }
-
-    if (isLoginSuccess) {
-      dispatch(clearState());
-
-      navigate(routes.DASHBOARD);
-    }
-  }, [user, error, isLoginSuccess]);
+  }, [user, error]);
 
   return (
     <Stack spacing={12}>

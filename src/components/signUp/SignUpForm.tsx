@@ -64,8 +64,6 @@ function SignUpForm() {
         isClosable: true,
       });
 
-      dispatch(clearState());
-
       navigate(routes.DASHBOARD);
     }
   }, [user, error, isLoginSuccess]);

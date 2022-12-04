@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { loginUserThunk, signUpUserThunk } from "./userThunk";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -66,6 +67,9 @@ const userAuthSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
+
+      console.log("here");
+      state.isLoginSuccess = false;
 
       state.error = payload.data.details;
     });
