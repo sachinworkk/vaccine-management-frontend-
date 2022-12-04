@@ -168,7 +168,12 @@ function AddVaccineForm(props: any) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" type="submit" form="add-vaccine-form">
+            <Button
+              colorScheme="blue"
+              type="submit"
+              form="add-vaccine-form"
+              isLoading={props.isAdding}
+            >
               Add
             </Button>
             <Button mr={3} onClick={props.onClose} variant="ghost">

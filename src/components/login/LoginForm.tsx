@@ -44,7 +44,6 @@ function LoginForm() {
 
   const onSubmit = (data: UserLogin) =>
     dispatch(loginUser(data)).then((response) => {
-      console.log({ response });
       navigate("/dashboard");
     });
 

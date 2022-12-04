@@ -1,4 +1,4 @@
-function VaccineCard() {
+function VaccineCard(props: any) {
   return <h1>Vaccine Card</h1>;
 }
 

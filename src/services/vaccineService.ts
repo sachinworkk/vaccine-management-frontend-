@@ -1,9 +1,9 @@
-import { http } from "./http";
+import { http, multipartFormHttp } from "./http";
 
 export const getVaccines = async () => {
   return http.get("/vaccine");
 };
 
 export const postVaccine = async (payload: object) => {
-  return http.post("/vaccine", payload);
+  return multipartFormHttp.post("/vaccine", payload);
 };
