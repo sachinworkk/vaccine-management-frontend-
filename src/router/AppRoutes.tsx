@@ -14,6 +14,7 @@ import store from "../redux/store";
 
 import AuthenticatedRoutes from "./AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";
+import VaccineDetail from "../pages/VaccineDetail";
 
 function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ function AppRoutes() {
           <Route element={<AuthenticatedRoutes />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             <Route path={routes.VACCINE} element={<VaccinePage />} />
+            <Route path={routes.VACCINE_DETAIL} element={<VaccineDetail />} />
           </Route>
 
           <Route element={<UnAuthenticatedRoutes />}>
