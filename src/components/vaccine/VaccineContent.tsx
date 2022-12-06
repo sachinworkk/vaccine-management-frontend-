@@ -63,7 +63,6 @@ function VaccineContent() {
   };
 
   const onEditVaccine = (data: any) => {
-    console.log(data);
     const formData = new FormData();
 
     if (data?.file[0]?.name.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -80,10 +79,9 @@ function VaccineContent() {
       "isMandatory",
       data?.isMandatory ? data.isMandatory : false
     );
-    formData.append("stage", data.stage);
     formData.append("numberOfDoses", data.numberOfDoses);
 
-    dispatch(editVaccineReducer(formData));
+    dispatch(editVaccineReducer({ id: data.id, data: formData }));
   };
 
   const getVaccineContent = () => {

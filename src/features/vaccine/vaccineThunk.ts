@@ -46,9 +46,8 @@ export const editVaccineThunk = async (
   payload: any,
   { rejectWithValue }: any
 ) => {
-  console.log(payload);
   try {
-    const resp = await editVaccine(payload.id, payload);
+    const resp = await editVaccine(payload.id, payload.data);
 
     return resp;
   } catch (error: any) {
