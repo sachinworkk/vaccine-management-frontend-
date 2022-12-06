@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import {
+  editVaccineThunk,
   getVaccinesThunk,
   postVaccineThunk,
   deleteVaccineThunk,
@@ -25,6 +26,11 @@ export const postVaccineReducer = createAsyncThunk(
 export const deleteVaccineReducer = createAsyncThunk(
   "vaccine/deleteVaccine",
   deleteVaccineThunk
+);
+
+export const editVaccineReducer = createAsyncThunk(
+  "vaccine/editVaccine",
+  editVaccineThunk
 );
 
 const initialState = {
@@ -75,23 +81,21 @@ const vaccineSlice = createSlice({
       }
     );
 
-    builder.addCase(getVaccineByIdReducer.pending, (state: any) => {
-      state.isLoading = true;
+    builder.addCase(editVaccineReducer.pending, (state: any) => {
+      state.isPerformingAction = true;
+    });
+    builder.addCase(editVaccineReducer.fulfilled, (state: any, { payload }) => {
+      const { data: vaccine } = payload;
+
+      state.isPerformingAction = false;
+
+      state.selectedVaccine = vaccine.data;
     });
     builder.addCase(
-      getVaccineByIdReducer.fulfilled,
-      (state: any, { payload }) => {
-        const { data: vaccine } = payload;
-
-        state.isLoading = false;
-
-        state.selectedVaccine = vaccine.data;
-      }
-    );
-    builder.addCase(
-      getVaccineByIdReducer.rejected,
+      editVaccineReducer.rejected,
       (state: any, { payload }: any) => {
-        state.isLoading = false;
+        console.log(payload);
+        state.isPerformingAction = false;
 
         state.error = payload.response.data;
       }
@@ -113,6 +117,7 @@ const vaccineSlice = createSlice({
         state.error = payload.data.details;
       }
     );
+
     builder.addCase(deleteVaccineReducer.pending, (state: any) => {
       state.isPerformingAction = true;
     });

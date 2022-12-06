@@ -7,9 +7,11 @@ import {
   getVaccinesReducer,
   postVaccineReducer,
   deleteVaccineReducer,
+  editVaccineReducer,
 } from "../../features/vaccine/vaccineSlice";
 
 import AddVaccineForm from "./AddVaccineForm";
+import EditVaccineForm from "./EditVaccineForm";
 
 import DataTable from "../commons/DataTable";
 import FloatingButton from "../commons/FloatingButton";
@@ -27,6 +29,12 @@ function VaccineContent() {
     onClose: onCloseDeleteVaccine,
   } = useDisclosure();
 
+  const {
+    isOpen: isEditVaccineOpen,
+    onOpen: onOpenEditVaccine,
+    onClose: onCloseEditVaccine,
+  } = useDisclosure();
+
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -35,23 +43,47 @@ function VaccineContent() {
 
   const {
     vaccines,
+    error,
     isAdded,
     isDeleted,
-    isPerformingAction,
-    error,
     selectedVaccine,
+    isPerformingAction,
   } = useAppSelector((state) => state.vaccine);
-
-  const onEditClick = () => {};
-
-  const onViewDetailClick = () => {};
 
   const onDeleteClick = () => {
     onOpenDeleteVaccine();
   };
 
+  const onEditClick = () => {
+    onOpenEditVaccine();
+  };
+
   const onDeleteVaccine = () => {
     dispatch(deleteVaccineReducer(selectedVaccine?.id));
+  };
+
+  const onEditVaccine = (data: any) => {
+    console.log(data);
+    const formData = new FormData();
+
+    if (data?.file[0]?.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+      formData.append("vaccineImage", data.file[0]);
+    } else {
+      formData.append("vaccineImageUrl", data.vaccineImageUrl);
+    }
+
+    formData.append("name", data.name);
+
+    formData.append("stage", data.stage);
+    formData.append("description", data.description);
+    formData.append(
+      "isMandatory",
+      data?.isMandatory ? data.isMandatory : false
+    );
+    formData.append("stage", data.stage);
+    formData.append("numberOfDoses", data.numberOfDoses);
+
+    dispatch(editVaccineReducer(formData));
   };
 
   const getVaccineContent = () => {
@@ -178,6 +210,13 @@ function VaccineContent() {
         isOpen={isDeleteVaccineOpen}
         onClick={onDeleteVaccine}
         onClose={onCloseDeleteVaccine}
+      />
+
+      <EditVaccineForm
+        isOpen={isEditVaccineOpen}
+        onSubmit={onEditVaccine}
+        vaccine={selectedVaccine}
+        onClose={onCloseEditVaccine}
       />
 
       <AddVaccineForm

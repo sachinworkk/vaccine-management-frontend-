@@ -13,5 +13,9 @@ export const postVaccine = async (payload: object) => {
 };
 
 export const deleteVaccine = async (id: number) => {
-  return multipartFormHttp.delete(`/vaccine/${id}`);
+  return http.delete(`/vaccine/${id}`);
+};
+
+export const editVaccine = async (id: number, payload: object) => {
+  return multipartFormHttp.put(`/vaccine/${id}`, payload);
 };

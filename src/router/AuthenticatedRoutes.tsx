@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../hooks/hooks";
 import { getAccessToken, getRefreshToken } from "../utils/localStorage";
 
 import * as routes from "../routes/routes";

@@ -1,6 +1,7 @@
 import {
   getVaccines,
   postVaccine,
+  editVaccine,
   deleteVaccine,
   getVaccineById,
 } from "./../../services/vaccineService";
@@ -37,6 +38,21 @@ export const postVaccineThunk = async (
 
     return resp;
   } catch (error: any) {
+    return rejectWithValue(error.response);
+  }
+};
+
+export const editVaccineThunk = async (
+  payload: any,
+  { rejectWithValue }: any
+) => {
+  console.log(payload);
+  try {
+    const resp = await editVaccine(payload.id, payload);
+
+    return resp;
+  } catch (error: any) {
+    console.log(error);
     return rejectWithValue(error.response);
   }
 };
