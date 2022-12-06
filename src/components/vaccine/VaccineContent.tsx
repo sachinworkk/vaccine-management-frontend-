@@ -81,7 +81,10 @@ function VaccineContent() {
     );
     formData.append("numberOfDoses", data.numberOfDoses);
 
-    dispatch(editVaccineReducer({ id: data.id, data: formData }));
+    dispatch(editVaccineReducer({ id: data.id, data: formData })).then(() => {
+      onCloseEditVaccine();
+      dispatch(getVaccinesReducer({}));
+    });
   };
 
   const getVaccineContent = () => {
@@ -191,9 +194,10 @@ function VaccineContent() {
     );
     formData.append("numberOfDoses", data.numberOfDoses);
 
-    dispatch(postVaccineReducer(formData)).then(() =>
-      dispatch(getVaccinesReducer({}))
-    );
+    dispatch(postVaccineReducer(formData)).then(() => {
+      onClose();
+      dispatch(getVaccinesReducer({}));
+    });
   };
 
   useEffect(() => {

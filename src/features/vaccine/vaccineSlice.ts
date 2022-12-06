@@ -81,6 +81,28 @@ const vaccineSlice = createSlice({
       }
     );
 
+    builder.addCase(getVaccineByIdReducer.pending, (state: any) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      getVaccineByIdReducer.fulfilled,
+      (state: any, { payload }) => {
+        const { data: vaccine } = payload;
+
+        state.isLoading = false;
+
+        state.selectedVaccine = vaccine.data;
+      }
+    );
+    builder.addCase(
+      getVaccineByIdReducer.rejected,
+      (state: any, { payload }: any) => {
+        state.isLoading = false;
+
+        state.error = payload.response.data;
+      }
+    );
+
     builder.addCase(editVaccineReducer.pending, (state: any) => {
       state.isPerformingAction = true;
     });
