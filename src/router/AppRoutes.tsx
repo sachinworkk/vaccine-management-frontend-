@@ -1,20 +1,20 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import store from "../redux/store";
+import { Provider } from "react-redux";
+
 import * as routes from "../routes/routes";
 
 import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage";
 import VaccinePage from "../pages/VaccinPage";
 import PageNotFound from "../pages/PageNotFound";
+import VaccineDetail from "../pages/VaccineDetail";
 
 import Dashboard from "../components/dashboard/Dashboard";
 
-import { Provider } from "react-redux";
-import store from "../redux/store";
-
 import AuthenticatedRoutes from "./AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";
-import VaccineDetail from "../pages/VaccineDetail";
 
 function AppRoutes() {
   return (

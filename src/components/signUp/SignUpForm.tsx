@@ -67,7 +67,7 @@ function SignUpForm() {
         isClosable: true,
       });
     }
-  }, [user, error, isLoginSuccess]);
+  }, [user, error, toast, dispatch, isLoginSuccess]);
 
   return (
     <Box p={8} minWidth="400px" borderWidth={1} borderRadius={8} boxShadow="lg">

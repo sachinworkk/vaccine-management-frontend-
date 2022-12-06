@@ -19,7 +19,7 @@ export const loginUserThunk = async (
   }
 };
 
-export const signOutUserThunk = async ({}, { rejectWithValue }: any) => {
+export const signOutUserThunk = async ({ rejectWithValue }: any) => {
   try {
     const resp = await signOutUser();
 

@@ -4,7 +4,6 @@ import * as routes from "../../routes/routes";
 
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
@@ -23,9 +22,9 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { FiMenu, FiChevronDown } from "react-icons/fi";
+import { FiMenu } from "react-icons/fi";
 
-import { FaHome, FaSyringe } from "react-icons/fa";
+import { FaHome, FaSyringe, FaUser } from "react-icons/fa";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { useAppDispatch } from "../../hooks/hooks";
@@ -195,15 +194,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               _focus={{ boxShadow: "none" }}
             >
               <HStack>
-                <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-                <Box display={{ base: "none", md: "flex" }}>
-                  <FiChevronDown />
-                </Box>
+                <FaUser />
               </HStack>
             </MenuButton>
             <MenuList
