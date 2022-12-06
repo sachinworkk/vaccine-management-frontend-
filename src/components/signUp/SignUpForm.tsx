@@ -44,7 +44,10 @@ function SignUpForm() {
 
   const { user, isLoginSuccess, error } = useAppSelector((state) => state.auth);
 
-  const onSubmit = (data: UserSignUp) => dispatch(signUpUser(data));
+  const onSubmit = (data: UserSignUp) =>
+    dispatch(signUpUser(data)).then(() => {
+      navigate(routes.DASHBOARD);
+    });
 
   useEffect(() => {
     if (error) {
@@ -63,8 +66,6 @@ function SignUpForm() {
         status: "success",
         isClosable: true,
       });
-
-      navigate(routes.DASHBOARD);
     }
   }, [user, error, isLoginSuccess]);
 

@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { loginUserThunk, signUpUserThunk } from "./userThunk";
+import { loginUserThunk, signUpUserThunk, signOutUserThunk } from "./userThunk";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
@@ -16,6 +15,10 @@ const initialState = {
 };
 
 export const loginUser = createAsyncThunk("userAuth/loginUser", loginUserThunk);
+export const signOutUser = createAsyncThunk(
+  "userAuth/signOutUser",
+  signOutUserThunk
+);
 export const signUpUser = createAsyncThunk(
   "signUpUserAuth/signUpUser",
   signUpUserThunk
@@ -70,6 +73,19 @@ const userAuthSlice = createSlice({
 
       state.isLoginSuccess = false;
 
+      state.error = payload.data.details;
+    });
+    builder.addCase(signOutUser.pending, (state: any) => {
+      state.isLoading = true;
+    });
+    builder.addCase(signOutUser.fulfilled, (state: any, { payload }) => {
+      state.isLoading = false;
+      state.isLoginSuccess = false;
+
+      saveAccessToken("");
+      saveRefreshToken("");
+    });
+    builder.addCase(signOutUser.rejected, (state: any, { payload }: any) => {
       state.error = payload.data.details;
     });
   },
