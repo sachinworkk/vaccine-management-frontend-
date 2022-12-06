@@ -24,13 +24,33 @@ import {
 
 import { Controller, useForm } from "react-hook-form";
 
+import FormData from "form-data";
+
+import { VaccinePayload } from "../../types/vaccinePayload";
+
 function AddVaccineForm(props: any) {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
-    control,
   } = useForm();
+
+  const handleAddVaccine = (data: VaccinePayload) => {
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("vaccineImage", data.file[0]);
+    formData.append("stage", data.stage);
+    formData.append("description", data.description);
+    formData.append(
+      "isMandatory",
+      data?.isMandatory ? data.isMandatory : false
+    );
+    formData.append("numberOfDoses", data.numberOfDoses);
+
+    props.onSubmit(formData);
+  };
 
   return (
     <>
@@ -44,7 +64,9 @@ function AddVaccineForm(props: any) {
           <ModalBody>
             <form
               id="add-vaccine-form"
-              onSubmit={handleSubmit((data) => props.onSubmit(data))}
+              onSubmit={handleSubmit((data) =>
+                handleAddVaccine(data as VaccinePayload)
+              )}
             >
               <Box p={4} display="flex" flexDirection="column" gap="16px">
                 <FormControl isInvalid={Boolean(errors.name)}>

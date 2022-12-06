@@ -25,6 +25,10 @@ import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
+import FormData from "form-data";
+
+import { VaccinePayload } from "../../types/vaccinePayload";
+
 function EditVaccineForm(props: any) {
   const {
     register,
@@ -35,9 +39,30 @@ function EditVaccineForm(props: any) {
   } = useForm();
 
   useEffect(() => {
-    console.log({ ...props.vaccine });
     reset({ ...props.vaccine });
   }, [props.vaccine]);
+
+  const handleAddVaccine = (data: VaccinePayload) => {
+    const formData = new FormData();
+
+    if (data?.file[0]?.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+      formData.append("vaccineImage", data.file[0]);
+    } else {
+      formData.append("vaccineImageUrl", data.vaccineImageUrl);
+    }
+
+    formData.append("name", data.name);
+
+    formData.append("stage", data.stage);
+    formData.append("description", data.description);
+    formData.append(
+      "isMandatory",
+      data?.isMandatory ? data.isMandatory : false
+    );
+    formData.append("numberOfDoses", data.numberOfDoses);
+
+    props.onSubmit(data.id, formData);
+  };
 
   return (
     <>
@@ -51,7 +76,9 @@ function EditVaccineForm(props: any) {
           <ModalBody>
             <form
               id="add-vaccine-form"
-              onSubmit={handleSubmit((data) => props.onSubmit(data))}
+              onSubmit={handleSubmit((data) =>
+                handleAddVaccine(data as VaccinePayload)
+              )}
             >
               <Box p={4} display="flex" flexDirection="column" gap="16px">
                 <FormControl isInvalid={Boolean(errors.name)}>

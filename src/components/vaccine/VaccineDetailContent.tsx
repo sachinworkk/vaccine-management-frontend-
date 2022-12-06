@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
 import {
   Box,
   FormLabel,
@@ -8,11 +11,10 @@ import {
   Select,
   Image,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import { getVaccineByIdReducer } from "../../features/vaccine/vaccineSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 function VaccineDetailContent() {
   const { id } = useParams();

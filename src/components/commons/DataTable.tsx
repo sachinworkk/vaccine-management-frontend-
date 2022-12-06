@@ -7,8 +7,9 @@ import {
 } from "@table-library/react-table-library/chakra-ui";
 import { Box, IconButton, Button, HStack } from "@chakra-ui/react";
 
-import { usePagination } from "@table-library/react-table-library/pagination";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
+import { usePagination } from "@table-library/react-table-library/pagination";
 
 function DataTable(props: any) {
   const chakraTheme = getTheme(DEFAULT_OPTIONS);
