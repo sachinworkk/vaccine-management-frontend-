@@ -45,12 +45,12 @@ const initialState = {
     numberOfDoses: null,
     vaccineImageUrl: "",
   },
-  isLoading: false,
-  isAdded: false,
-  isPerformingAction: false,
-  isDeleted: false,
-  isEdited: false,
   error: "",
+  isAdded: false,
+  isLoading: false,
+  isEdited: false,
+  isDeleted: false,
+  isPerformingAction: false,
 };
 
 const vaccineSlice = createSlice({
@@ -108,6 +108,8 @@ const vaccineSlice = createSlice({
     });
     builder.addCase(editVaccineReducer.fulfilled, (state: any, { payload }) => {
       const { data: vaccine } = payload;
+
+      state.isEdited = true;
 
       state.isPerformingAction = false;
 

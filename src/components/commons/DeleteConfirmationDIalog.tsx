@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Button,
   AlertDialog,
@@ -7,7 +9,6 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
-import React from "react";
 
 function DeleteConfirmationDialog(props: any) {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
@@ -22,12 +23,10 @@ function DeleteConfirmationDialog(props: any) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Vaccine
+              {props.dialogHeader}
             </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
+            <AlertDialogBody>{props.dialogSubheader}</AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={props.onClose}>

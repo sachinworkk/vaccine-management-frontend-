@@ -17,11 +17,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import DataTable from "../commons/DataTable";
 import FloatingButton from "../commons/FloatingButton";
+import DeleteConfirmationDialog from "../commons/DeleteConfirmationDIalog";
 
 import AddVaccineForm from "./AddVaccineForm";
 import EditVaccineForm from "./EditVaccineForm";
-
-import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 
 function VaccineContent() {
   const {
@@ -49,9 +48,10 @@ function VaccineContent() {
   const dispatch = useAppDispatch();
 
   const {
-    vaccines,
     error,
     isAdded,
+    isEdited,
+    vaccines,
     isDeleted,
     selectedVaccine,
     isPerformingAction,
@@ -70,18 +70,22 @@ function VaccineContent() {
       });
     }
 
-    if (isDeleted) {
-      onCloseDeleteVaccine();
+    if (isEdited) {
+      toast({
+        title: "Vaccine Successfully edited",
+        status: "success",
+        isClosable: true,
+      });
+    }
 
+    if (isDeleted) {
       toast({
         title: "Vaccine Successfully deleted",
         status: "success",
         isClosable: true,
       });
-
-      dispatch(getVaccinesReducer({}));
     }
-  }, [isAdded, isPerformingAction, error]);
+  }, [isAdded, isEdited, isPerformingAction, error]);
 
   const onAddVaccine = (data: FormData) => {
     dispatch(postVaccineReducer(data)).then(() => {
@@ -92,7 +96,11 @@ function VaccineContent() {
   };
 
   const onDeleteVaccine = () => {
-    dispatch(deleteVaccineReducer(selectedVaccine?.id));
+    dispatch(deleteVaccineReducer(selectedVaccine?.id)).then(() => {
+      onCloseDeleteVaccine();
+
+      dispatch(getVaccinesReducer({}));
+    });
   };
 
   const onEditVaccine = (id: number, data: FormData) => {
@@ -194,9 +202,11 @@ function VaccineContent() {
       />
 
       <DeleteConfirmationDialog
-        isOpen={isDeleteVaccineOpen}
+        dialogHeader="Delete Vaccine"
         onClick={onDeleteVaccine}
+        isOpen={isDeleteVaccineOpen}
         onClose={onCloseDeleteVaccine}
+        dialogSubheader="Are you sure? You want to delete the vaccine?"
       />
 
       <FloatingButton onClick={onOpenAddVaccine} />
