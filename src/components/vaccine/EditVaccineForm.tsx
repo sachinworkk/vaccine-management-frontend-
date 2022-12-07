@@ -181,6 +181,8 @@ function EditVaccineForm(props: editVaccineForm) {
                     render={({ field: { value } }) => (
                       <Image
                         src={value}
+                        mb="4"
+                        boxSize="100"
                         alt="Vaccine Image"
                         fallbackSrc="https://via.placeholder.com/400?text=Image+Not+Available"
                       />
