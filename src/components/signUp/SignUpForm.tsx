@@ -34,6 +34,7 @@ function SignUpForm() {
   const navigate = useNavigate();
 
   const {
+    watch,
     register,
     handleSubmit,
     formState: { errors },
@@ -68,6 +69,8 @@ function SignUpForm() {
       });
     }
   }, [user, error, toast, dispatch, isLoginSuccess]);
+
+  const password = watch("password", "");
 
   return (
     <Box p={8} minWidth="400px" borderWidth={1} borderRadius={8} boxShadow="lg">
@@ -128,7 +131,7 @@ function SignUpForm() {
               />
 
               <FormErrorMessage>
-                {errors.date && errors.date.message?.toString()}
+                {errors.dateOfBirth && errors.dateOfBirth.message?.toString()}
               </FormErrorMessage>
             </FormControl>
 
@@ -184,6 +187,8 @@ function SignUpForm() {
                 placeholder="Please enter password"
                 {...register("confirmPassword", {
                   required: "Password is required",
+                  validate: (value) =>
+                    value === password || "The passwords do not match",
                 })}
               />
 

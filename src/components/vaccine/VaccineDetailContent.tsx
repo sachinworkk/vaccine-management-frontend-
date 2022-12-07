@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 
 import {
   Box,
-  FormLabel,
   Input,
-  Textarea,
-  FormControl,
-  Checkbox,
-  Select,
   Image,
+  Select,
+  Textarea,
+  Checkbox,
+  FormLabel,
+  FormControl,
 } from "@chakra-ui/react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
