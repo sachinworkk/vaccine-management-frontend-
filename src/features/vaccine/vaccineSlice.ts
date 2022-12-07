@@ -42,7 +42,7 @@ const initialState = {
     description: "",
     stage: "",
     isMandatory: false,
-    numberOfDoses: null,
+    numberOfDoses: 0,
     vaccineImageUrl: "",
   },
   error: "",
@@ -59,6 +59,22 @@ const vaccineSlice = createSlice({
   reducers: {
     selectVaccine: (state, { payload }) => {
       state.selectedVaccine = payload;
+    },
+    resetSelectedVaccine: (state) => {
+      state.selectedVaccine = {
+        id: "",
+        name: "",
+        description: "",
+        stage: "",
+        isMandatory: false,
+        numberOfDoses: 0,
+        vaccineImageUrl: "",
+      };
+      state.isAdded = false;
+      state.isLoading = false;
+      state.isEdited = false;
+      state.isDeleted = false;
+      state.isPerformingAction = false;
     },
   },
   extraReducers: (builder) => {
@@ -97,17 +113,13 @@ const vaccineSlice = createSlice({
     builder.addCase(editVaccine.pending, (state: any) => {
       state.isPerformingAction = true;
     });
-    builder.addCase(editVaccine.fulfilled, (state: any, { payload }) => {
-      const { data: vaccine } = payload;
-
+    builder.addCase(editVaccine.fulfilled, (state: any) => {
       state.isEdited = true;
 
       state.isAdded = false;
       state.isDeleted = false;
 
       state.isPerformingAction = false;
-
-      state.selectedVaccine = vaccine.data;
     });
     builder.addCase(editVaccine.rejected, (state: any, { payload }: any) => {
       state.isAdded = false;
@@ -163,6 +175,6 @@ const vaccineSlice = createSlice({
   },
 });
 
-export const { selectVaccine } = vaccineSlice.actions;
+export const { selectVaccine, resetSelectedVaccine } = vaccineSlice.actions;
 
 export const vaccineReducer = vaccineSlice.reducer;

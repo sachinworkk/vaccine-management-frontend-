@@ -2,6 +2,7 @@ export interface addVaccineForm {
   isOpen: boolean;
   onClose: () => void;
   isAdding: boolean;
+  vaccine: object;
   onSubmit: (data: any) => void;
 }
 

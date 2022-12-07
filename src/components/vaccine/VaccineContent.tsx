@@ -18,11 +18,14 @@ import {
   editVaccine,
   selectVaccine,
   deleteVaccine,
+  resetSelectedVaccine,
 } from "../../features/vaccine/vaccineSlice";
 
 import { ReactComponent as AddVaccineImg } from "../../assets/images/AddVaccine.svg";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+
+import { VaccinePayload } from "../../types/vaccinePayload";
 
 import DataTable from "../commons/DataTable";
 import FloatingButton from "../commons/FloatingButton";
@@ -113,9 +116,29 @@ function VaccineContent() {
     isPerformingAction,
   ]);
 
+  const openAddVaccine = () => {
+    dispatch(resetSelectedVaccine());
+
+    onOpenAddVaccine();
+  };
+
+  const openEditVaccine = (item: VaccinePayload) => {
+    dispatch(selectVaccine(item));
+
+    onOpenEditVaccine();
+  };
+
+  const openDeleteVaccine = (item: VaccinePayload) => {
+    dispatch(selectVaccine(item));
+
+    onOpenDeleteVaccine();
+  };
+
   const onAddVaccine = (data: FormData) => {
     dispatch(postVaccine(data)).then(() => {
       onCloseAddVaccine();
+
+      dispatch(resetSelectedVaccine());
 
       dispatch(getVaccines({}));
     });
@@ -125,6 +148,8 @@ function VaccineContent() {
     dispatch(deleteVaccine(selectedVaccine?.id)).then(() => {
       onCloseDeleteVaccine();
 
+      dispatch(resetSelectedVaccine());
+
       dispatch(getVaccines({}));
     });
   };
@@ -132,6 +157,8 @@ function VaccineContent() {
   const onEditVaccine = (data: FormData, id: number | undefined) => {
     dispatch(editVaccine({ id, data })).then(() => {
       onCloseEditVaccine();
+
+      dispatch(resetSelectedVaccine());
 
       dispatch(getVaccines({}));
     });
@@ -152,23 +179,23 @@ function VaccineContent() {
         columns={[
           {
             label: "Name",
-            renderCell: (item: any) => item.name,
+            renderCell: (item: VaccinePayload) => item.name,
           },
           {
             label: "Number Of Doses",
-            renderCell: (item: any) => item.numberOfDoses,
+            renderCell: (item: VaccinePayload) => item.numberOfDoses,
           },
           {
             label: "Stage",
-            renderCell: (item: any) => item.stage,
+            renderCell: (item: VaccinePayload) => item.stage,
           },
           {
             label: "Description",
-            renderCell: (item: any) => item.description,
+            renderCell: (item: VaccinePayload) => item.description,
           },
           {
             label: "Options",
-            renderCell: (item: any) => (
+            renderCell: (item: VaccinePayload) => (
               <Box>
                 <IconButton
                   aria-label="edit"
@@ -177,9 +204,7 @@ function VaccineContent() {
                   variant="ghost"
                   colorScheme="teal"
                   onClick={() => {
-                    dispatch(selectVaccine(item));
-
-                    onOpenEditVaccine();
+                    openEditVaccine(item);
                   }}
                 />
 
@@ -201,9 +226,7 @@ function VaccineContent() {
                   variant="ghost"
                   colorScheme="teal"
                   onClick={() => {
-                    dispatch(selectVaccine(item));
-
-                    onOpenDeleteVaccine();
+                    openDeleteVaccine(item);
                   }}
                 />
               </Box>
@@ -226,6 +249,7 @@ function VaccineContent() {
       <AddVaccineForm
         onSubmit={onAddVaccine}
         isOpen={isAddVaccineOpen}
+        vaccine={selectedVaccine}
         onClose={onCloseAddVaccine}
         isAdding={isPerformingAction}
       ></AddVaccineForm>
@@ -247,7 +271,7 @@ function VaccineContent() {
         dialogSubheader="Are you sure? You want to delete the vaccine?"
       />
 
-      <FloatingButton onClick={onOpenAddVaccine} />
+      <FloatingButton onClick={openAddVaccine} />
     </>
   );
 }

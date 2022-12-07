@@ -22,6 +22,7 @@ import {
   NumberDecrementStepper,
 } from "@chakra-ui/react";
 
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import FormData from "form-data";
@@ -31,11 +32,16 @@ import { VaccinePayload } from "../../types/vaccinePayload";
 
 function AddVaccineForm(props: addVaccineForm) {
   const {
+    reset,
     register,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    reset({ ...props.vaccine });
+  }, [props.vaccine]);
 
   const handleAddVaccine = (data: VaccinePayload) => {
     const formData = new FormData();

@@ -71,7 +71,7 @@ function EditVaccineForm(props: editVaccineForm) {
         <ModalOverlay />
 
         <ModalContent>
-          <ModalHeader>Add Vaccine</ModalHeader>
+          <ModalHeader>Edit Vaccine</ModalHeader>
           <Divider />
 
           <ModalBody>
