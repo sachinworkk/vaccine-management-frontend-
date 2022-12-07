@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import {
   Box,
   Link,
@@ -22,9 +20,10 @@ import { useNavigate } from "react-router-dom";
 
 import * as routes from "../../routes/routes";
 
+import { AppError } from "../../types/appError";
 import { UserSignUp } from "../../types/userSingUp";
 
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 
 import { signUpUser, clearState } from "../../features/user/userAuthSlice";
 
@@ -43,32 +42,27 @@ function SignUpForm() {
 
   const dispatch = useAppDispatch();
 
-  const { user, isLoginSuccess, error } = useAppSelector((state) => state.auth);
+  const onSubmit = async (data: UserSignUp) => {
+    try {
+      await dispatch(signUpUser(data));
 
-  const onSubmit = (data: UserSignUp) =>
-    dispatch(signUpUser(data)).then(() => {
-      navigate(routes.DASHBOARD);
-    });
-
-  useEffect(() => {
-    if (error) {
       toast({
-        title: error,
+        title: "User successfully registered",
+        status: "success",
+        isClosable: true,
+      });
+
+      navigate(routes.SIGN_IN);
+    } catch (error) {
+      toast({
+        title: (error as AppError).data?.details,
         status: "error",
         isClosable: true,
       });
 
       dispatch(clearState());
     }
-
-    if (isLoginSuccess) {
-      toast({
-        title: "User successfully registered",
-        status: "success",
-        isClosable: true,
-      });
-    }
-  }, [user, error, toast, dispatch, isLoginSuccess]);
+  };
 
   const password = watch("password", "");
 

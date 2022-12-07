@@ -45,11 +45,7 @@ const initialState = {
     numberOfDoses: 0,
     vaccineImageUrl: "",
   },
-  error: "",
-  isAdded: false,
   isLoading: false,
-  isEdited: false,
-  isDeleted: false,
   isPerformingAction: false,
 };
 
@@ -70,10 +66,7 @@ const vaccineSlice = createSlice({
         numberOfDoses: 0,
         vaccineImageUrl: "",
       };
-      state.isAdded = false;
       state.isLoading = false;
-      state.isEdited = false;
-      state.isDeleted = false;
       state.isPerformingAction = false;
     },
   },
@@ -90,8 +83,6 @@ const vaccineSlice = createSlice({
     });
     builder.addCase(getVaccines.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
-
-      state.error = payload.response.data;
     });
 
     builder.addCase(getVaccineById.pending, (state: any) => {
@@ -106,8 +97,6 @@ const vaccineSlice = createSlice({
     });
     builder.addCase(getVaccineById.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
-
-      state.error = payload.response.data;
     });
 
     builder.addCase(editVaccine.pending, (state: any) => {
@@ -116,19 +105,10 @@ const vaccineSlice = createSlice({
     builder.addCase(editVaccine.fulfilled, (state: any) => {
       state.isEdited = true;
 
-      state.isAdded = false;
-      state.isDeleted = false;
-
       state.isPerformingAction = false;
     });
-    builder.addCase(editVaccine.rejected, (state: any, { payload }: any) => {
-      state.isAdded = false;
-      state.isEdited = false;
-      state.isDeleted = false;
-
+    builder.addCase(editVaccine.rejected, (state: any) => {
       state.isPerformingAction = false;
-
-      state.error = payload.response.data;
     });
 
     builder.addCase(postVaccine.pending, (state: any) => {
@@ -136,41 +116,19 @@ const vaccineSlice = createSlice({
     });
     builder.addCase(postVaccine.fulfilled, (state: any) => {
       state.isPerformingAction = false;
-
-      state.isAdded = true;
-
-      state.isEdited = false;
-      state.isDeleted = false;
     });
-    builder.addCase(postVaccine.rejected, (state: any, { payload }: any) => {
-      state.isAdded = false;
-      state.isEdited = false;
-      state.isDeleted = false;
-
+    builder.addCase(postVaccine.rejected, (state: any) => {
       state.isPerformingAction = false;
-
-      state.error = payload.data.details;
     });
 
     builder.addCase(deleteVaccine.pending, (state: any) => {
       state.isPerformingAction = true;
     });
     builder.addCase(deleteVaccine.fulfilled, (state: any) => {
-      state.isDeleted = true;
-
-      state.isAdded = false;
-      state.isEdited = false;
-
       state.isPerformingAction = false;
     });
-    builder.addCase(deleteVaccine.rejected, (state: any, { payload }: any) => {
-      state.isAdded = false;
-      state.isEdited = false;
-      state.isDeleted = false;
-
+    builder.addCase(deleteVaccine.rejected, (state: any) => {
       state.isPerformingAction = false;
-
-      state.error = payload.data.details;
     });
   },
 });

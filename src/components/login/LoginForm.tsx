@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import {
   Box,
   Link,
@@ -20,12 +18,13 @@ import { useForm } from "react-hook-form";
 
 import * as routes from "../../routes/routes";
 
+import { AppError } from "../../types/appError";
 import { UserLogin } from "../../types/userLogin";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import { loginUser, clearState } from "../../features/user/userAuthSlice";
-import { saveAccessToken } from "../../utils/localStorage";
+import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
 
 function LoginForm() {
   const toast = useToast();
@@ -40,23 +39,26 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
-  const { user, isLoading, error } = useAppSelector((state) => state.auth);
+  const { isLoading } = useAppSelector((state) => state.auth);
 
-  const onSubmit = (data: UserLogin) =>
-    dispatch(loginUser(data)).then((response) => {
-      navigate("/dashboard");
-    });
+  const onSubmit = async (data: UserLogin) => {
+    try {
+      const resp = await dispatch(loginUser(data)).unwrap();
 
-  useEffect(() => {
-    if (error) {
+      saveAccessToken(resp.data.accessToken);
+      saveRefreshToken(resp.data.refreshToken);
+
+      navigate(routes.DASHBOARD);
+    } catch (error) {
       toast({
-        title: error,
+        title: (error as AppError).data?.details,
         status: "error",
         isClosable: true,
       });
+
       dispatch(clearState());
     }
-  }, [user, error]);
+  };
 
   return (
     <Stack spacing={12}>

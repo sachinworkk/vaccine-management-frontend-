@@ -25,6 +25,7 @@ import { ReactComponent as AddVaccineImg } from "../../assets/images/AddVaccine.
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
+import { AppError } from "../../types/appError";
 import { VaccinePayload } from "../../types/vaccinePayload";
 
 import DataTable from "../commons/DataTable";
@@ -59,62 +60,12 @@ function VaccineContent() {
 
   const dispatch = useAppDispatch();
 
-  const {
-    error,
-    isAdded,
-    isEdited,
-    isLoading,
-    vaccines,
-    isDeleted,
-    selectedVaccine,
-    isPerformingAction,
-  } = useAppSelector((state) => state.vaccine);
+  const { isLoading, vaccines, selectedVaccine, isPerformingAction } =
+    useAppSelector((state) => state.vaccine);
 
   useEffect(() => {
     dispatch(getVaccines({}));
   }, [dispatch]);
-
-  useEffect(() => {
-    if (isAdded) {
-      toast({
-        title: "Vaccine Successfully created",
-        status: "success",
-        isClosable: true,
-      });
-    }
-
-    if (isEdited) {
-      toast({
-        title: "Vaccine Successfully edited",
-        status: "success",
-        isClosable: true,
-      });
-    }
-
-    if (isDeleted) {
-      toast({
-        title: "Vaccine Successfully deleted",
-        status: "success",
-        isClosable: true,
-      });
-    }
-
-    if (error) {
-      toast({
-        title: error,
-        status: "error",
-        isClosable: true,
-      });
-    }
-  }, [
-    toast,
-    error,
-    isAdded,
-    dispatch,
-    isEdited,
-    isDeleted,
-    isPerformingAction,
-  ]);
 
   const openAddVaccine = () => {
     dispatch(resetSelectedVaccine());
@@ -134,34 +85,76 @@ function VaccineContent() {
     onOpenDeleteVaccine();
   };
 
-  const onAddVaccine = (data: FormData) => {
-    dispatch(postVaccine(data)).then(() => {
+  const onAddVaccine = async (data: FormData) => {
+    try {
+      await dispatch(postVaccine(data));
+
       onCloseAddVaccine();
 
+      toast({
+        title: "Vaccine Successfully created",
+        status: "success",
+        isClosable: true,
+      });
+
       dispatch(resetSelectedVaccine());
 
-      dispatch(getVaccines({}));
-    });
+      await dispatch(getVaccines({}));
+    } catch (error) {
+      toast({
+        title: (error as AppError).data?.details,
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
-  const onDeleteVaccine = () => {
-    dispatch(deleteVaccine(selectedVaccine?.id)).then(() => {
+  const onDeleteVaccine = async () => {
+    try {
+      await dispatch(deleteVaccine(selectedVaccine?.id));
+
       onCloseDeleteVaccine();
 
+      toast({
+        title: "Vaccine Successfully deleted",
+        status: "success",
+        isClosable: true,
+      });
+
       dispatch(resetSelectedVaccine());
 
-      dispatch(getVaccines({}));
-    });
+      await dispatch(getVaccines({}));
+    } catch (error) {
+      toast({
+        title: (error as AppError).data?.details,
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
-  const onEditVaccine = (data: FormData, id: number | undefined) => {
-    dispatch(editVaccine({ id, data })).then(() => {
+  const onEditVaccine = async (data: FormData, id: number | undefined) => {
+    try {
+      await dispatch(editVaccine({ id, data }));
+
       onCloseEditVaccine();
+
+      toast({
+        title: "Vaccine Successfully edited",
+        status: "success",
+        isClosable: true,
+      });
 
       dispatch(resetSelectedVaccine());
 
-      dispatch(getVaccines({}));
-    });
+      await dispatch(getVaccines({}));
+    } catch (error) {
+      toast({
+        title: (error as AppError).data?.details,
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   const getVaccineContent = () => {

@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { loginUserThunk, signUpUserThunk, signOutUserThunk } from "./userThunk";
 
-import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
-
 const initialState = {
   user: {
     id: 0,
@@ -11,7 +9,6 @@ const initialState = {
     password: "",
   },
   isLoading: false,
-  isLoginSuccess: false,
   error: "",
 };
 
@@ -37,7 +34,6 @@ const userAuthSlice = createSlice({
       };
       state.error = "";
       state.isLoading = false;
-      state.isLoginSuccess = false;
     },
   },
   extraReducers: (builder) => {
@@ -49,7 +45,6 @@ const userAuthSlice = createSlice({
 
       state.isLoading = false;
       state.user = user;
-      state.isLoginSuccess = true;
     });
     builder.addCase(signUpUser.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
@@ -64,15 +59,9 @@ const userAuthSlice = createSlice({
 
       state.isLoading = false;
       state.user = user;
-      state.isLoginSuccess = true;
-
-      saveAccessToken(payload.data.accessToken);
-      saveRefreshToken(payload.data.refreshToken);
     });
     builder.addCase(loginUser.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
-
-      state.isLoginSuccess = false;
 
       state.error = payload.data.details;
     });
@@ -81,7 +70,6 @@ const userAuthSlice = createSlice({
     });
     builder.addCase(signOutUser.fulfilled, (state: any) => {
       state.isLoading = false;
-      state.isLoginSuccess = false;
     });
     builder.addCase(signOutUser.rejected, (state: any, { payload }: any) => {
       state.error = payload.data.details;
