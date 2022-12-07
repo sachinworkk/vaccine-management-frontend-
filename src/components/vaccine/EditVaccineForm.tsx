@@ -1,5 +1,6 @@
 import {
   Box,
+  Image,
   Input,
   Modal,
   Select,
@@ -27,8 +28,8 @@ import { Controller, useForm } from "react-hook-form";
 
 import FormData from "form-data";
 
-import { VaccinePayload } from "../../types/vaccinePayload";
 import { editVaccineForm } from "../../types/props";
+import { VaccinePayload } from "../../types/vaccinePayload";
 
 function EditVaccineForm(props: editVaccineForm) {
   const {
@@ -173,6 +174,19 @@ function EditVaccineForm(props: editVaccineForm) {
 
                 <FormControl>
                   <FormLabel>Vaccine Image</FormLabel>
+
+                  <Controller
+                    name="vaccineImageUrl"
+                    control={control}
+                    render={({ field: { value } }) => (
+                      <Image
+                        src={value}
+                        alt="Vaccine Image"
+                        fallbackSrc="https://via.placeholder.com/400?text=Image+Not+Available"
+                      />
+                    )}
+                  ></Controller>
+
                   <Input
                     type="file"
                     variant="flushed"

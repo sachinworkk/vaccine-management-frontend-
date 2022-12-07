@@ -1,35 +1,40 @@
 import { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { ReactText } from "react";
+
+import {
+  Box,
+  Flex,
+  Icon,
+  Link,
+  Text,
+  Menu,
+  HStack,
+  Drawer,
+  BoxProps,
+  MenuItem,
+  MenuList,
+  IconButton,
+  FlexProps,
+  MenuButton,
+  CloseButton,
+  DrawerContent,
+  useDisclosure,
+  useColorModeValue,
+} from "@chakra-ui/react";
+
+import { IconType } from "react-icons";
+import { FiMenu } from "react-icons/fi";
+import { FaHome, FaSyringe, FaUser } from "react-icons/fa";
 
 import * as routes from "../../routes/routes";
 
-import {
-  IconButton,
-  Box,
-  CloseButton,
-  Flex,
-  HStack,
-  Icon,
-  useColorModeValue,
-  Link,
-  Drawer,
-  DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
-  FlexProps,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
-import { FiMenu } from "react-icons/fi";
-
-import { FaHome, FaSyringe, FaUser } from "react-icons/fa";
-import { IconType } from "react-icons";
-import { ReactText } from "react";
 import { useAppDispatch } from "../../hooks/hooks";
-import { useNavigate } from "react-router-dom";
+
 import { signOutUser } from "../../features/user/userAuthSlice";
+
+import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
 
 interface LinkItemProps {
   path: string;
@@ -43,6 +48,19 @@ const LinkItems: Array<LinkItemProps> = [
 
 export default function Sidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+
+  const onSignOutUser = () => {
+    dispatch(signOutUser({})).then(() => {
+      saveAccessToken("");
+      saveRefreshToken("");
+
+      navigate(routes.SIGN_IN);
+    });
+  };
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
@@ -64,7 +82,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} onMenuItemClick={onSignOutUser} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
@@ -148,12 +166,9 @@ const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
+  onMenuItemClick: () => void;
 }
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
-
+const MobileNav = ({ onOpen, onMenuItemClick, ...rest }: MobileProps) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -202,15 +217,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem
-                onClick={() => {
-                  dispatch(signOutUser({})).then(() => {
-                    navigate(routes.SIGN_IN);
-                  });
-                }}
-              >
-                Sign out
-              </MenuItem>
+              <MenuItem onClick={onMenuItemClick}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

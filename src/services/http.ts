@@ -10,7 +10,7 @@ import {
 import { CONTENT_TYPE_JSON } from "./../constants/misc";
 
 /**
- * Axios instance for pipeline http.
+ * Axios instance for vaccine management.
  */
 export const http = axios.create({
   baseURL: "http://localhost:4000",
@@ -21,7 +21,7 @@ export const http = axios.create({
 });
 
 /**
- * Axios instance for pipeline http.
+ * Axios instance for vaccine management multiform data.
  */
 export const multipartFormHttp = axios.create({
   baseURL: "http://localhost:4000",

@@ -35,9 +35,9 @@ const userAuthSlice = createSlice({
         email: "",
         password: "",
       };
+      state.error = "";
       state.isLoading = false;
       state.isLoginSuccess = false;
-      state.error = "";
     },
   },
   extraReducers: (builder) => {
@@ -79,12 +79,9 @@ const userAuthSlice = createSlice({
     builder.addCase(signOutUser.pending, (state: any) => {
       state.isLoading = true;
     });
-    builder.addCase(signOutUser.fulfilled, (state: any, { payload }) => {
+    builder.addCase(signOutUser.fulfilled, (state: any) => {
       state.isLoading = false;
       state.isLoginSuccess = false;
-
-      saveAccessToken("");
-      saveRefreshToken("");
     });
     builder.addCase(signOutUser.rejected, (state: any, { payload }: any) => {
       state.error = payload.data.details;
