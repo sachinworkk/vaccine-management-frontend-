@@ -2,7 +2,9 @@ import { Button } from "@chakra-ui/react";
 
 import { FiPlus } from "react-icons/fi";
 
-function FloatingButton(props: any) {
+import { floatingButton } from "../../types/props";
+
+function FloatingButton(props: floatingButton) {
   return (
     <Button
       borderRadius="50%"

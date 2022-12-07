@@ -1,3 +1,16 @@
+export interface floatingButton {
+  onClick: () => void;
+}
+
+export interface dataTable {
+  items: never[];
+  columns: {
+    label: string;
+    renderCell: (item: any) => any;
+  }[];
+  numberOfItemsPerPage: number;
+}
+
 export interface addVaccineForm {
   isOpen: boolean;
   onClose: () => void;

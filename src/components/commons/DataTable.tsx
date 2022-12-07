@@ -1,5 +1,10 @@
 import { useTheme } from "@table-library/react-table-library/theme";
 import { CompactTable } from "@table-library/react-table-library/compact";
+import { usePagination } from "@table-library/react-table-library/pagination";
+
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
+import { dataTable } from "../../types/props";
 
 import {
   getTheme,
@@ -7,11 +12,7 @@ import {
 } from "@table-library/react-table-library/chakra-ui";
 import { Box, IconButton, Button, HStack } from "@chakra-ui/react";
 
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-import { usePagination } from "@table-library/react-table-library/pagination";
-
-function DataTable(props: any) {
+function DataTable(props: dataTable) {
   const chakraTheme = getTheme(DEFAULT_OPTIONS);
   const theme = useTheme(chakraTheme);
 
