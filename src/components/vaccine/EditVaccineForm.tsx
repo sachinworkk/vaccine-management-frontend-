@@ -28,8 +28,9 @@ import { Controller, useForm } from "react-hook-form";
 import FormData from "form-data";
 
 import { VaccinePayload } from "../../types/vaccinePayload";
+import { editVaccineForm } from "../../types/props";
 
-function EditVaccineForm(props: any) {
+function EditVaccineForm(props: editVaccineForm) {
   const {
     register,
     reset,
@@ -61,7 +62,7 @@ function EditVaccineForm(props: any) {
     );
     formData.append("numberOfDoses", data.numberOfDoses);
 
-    props.onSubmit(data.id, formData);
+    props.onSubmit(formData, data.id);
   };
 
   return (

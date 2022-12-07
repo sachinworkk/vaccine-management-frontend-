@@ -51,7 +51,6 @@ export const editVaccineThunk = async (
 
     return resp;
   } catch (error: any) {
-    console.log(error);
     return rejectWithValue(error.response);
   }
 };

@@ -14,7 +14,7 @@ import {
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
-import { getVaccineByIdReducer } from "../../features/vaccine/vaccineSlice";
+import { getVaccineById } from "../../features/vaccine/vaccineSlice";
 
 function VaccineDetailContent() {
   const { id } = useParams();
@@ -24,8 +24,8 @@ function VaccineDetailContent() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getVaccineByIdReducer(parseInt(id as string, 10)));
-  }, []);
+    dispatch(getVaccineById(parseInt(id as string, 10)));
+  }, [dispatch, id]);
 
   return (
     <>

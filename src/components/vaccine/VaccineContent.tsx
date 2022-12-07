@@ -3,15 +3,24 @@ import { useNavigate } from "react-router-dom";
 
 import { FaPen, FaEye, FaTrash } from "react-icons/fa";
 
-import { Box, IconButton, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Spinner,
+  useToast,
+  IconButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 import {
+  getVaccines,
+  postVaccine,
+  editVaccine,
   selectVaccine,
-  getVaccinesReducer,
-  postVaccineReducer,
-  deleteVaccineReducer,
-  editVaccineReducer,
+  deleteVaccine,
 } from "../../features/vaccine/vaccineSlice";
+
+import { ReactComponent as AddVaccineImg } from "../../assets/images/AddVaccine.svg";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
@@ -51,6 +60,7 @@ function VaccineContent() {
     error,
     isAdded,
     isEdited,
+    isLoading,
     vaccines,
     isDeleted,
     selectedVaccine,
@@ -58,8 +68,8 @@ function VaccineContent() {
   } = useAppSelector((state) => state.vaccine);
 
   useEffect(() => {
-    dispatch(getVaccinesReducer({}));
-  }, []);
+    dispatch(getVaccines({}));
+  }, [dispatch]);
 
   useEffect(() => {
     if (isAdded) {
@@ -85,33 +95,57 @@ function VaccineContent() {
         isClosable: true,
       });
     }
-  }, [isAdded, isEdited, isPerformingAction, error]);
+
+    if (error) {
+      toast({
+        title: error,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  }, [
+    toast,
+    error,
+    isAdded,
+    dispatch,
+    isEdited,
+    isDeleted,
+    isPerformingAction,
+  ]);
 
   const onAddVaccine = (data: FormData) => {
-    dispatch(postVaccineReducer(data)).then(() => {
+    dispatch(postVaccine(data)).then(() => {
       onCloseAddVaccine();
 
-      dispatch(getVaccinesReducer({}));
+      dispatch(getVaccines({}));
     });
   };
 
   const onDeleteVaccine = () => {
-    dispatch(deleteVaccineReducer(selectedVaccine?.id)).then(() => {
+    dispatch(deleteVaccine(selectedVaccine?.id)).then(() => {
       onCloseDeleteVaccine();
 
-      dispatch(getVaccinesReducer({}));
+      dispatch(getVaccines({}));
     });
   };
 
-  const onEditVaccine = (id: number, data: FormData) => {
-    dispatch(editVaccineReducer({ id, data })).then(() => {
+  const onEditVaccine = (data: FormData, id: number | undefined) => {
+    dispatch(editVaccine({ id, data })).then(() => {
       onCloseEditVaccine();
 
-      dispatch(getVaccinesReducer({}));
+      dispatch(getVaccines({}));
     });
   };
 
   const getVaccineContent = () => {
+    if (isLoading) {
+      return (
+        <Center h="60vh">
+          <Spinner />
+        </Center>
+      );
+    }
+
     return vaccines?.length > 0 ? (
       <DataTable
         items={vaccines}
@@ -179,7 +213,9 @@ function VaccineContent() {
         numberOfItemsPerPage={10}
       ></DataTable>
     ) : (
-      <h1>LOading</h1>
+      <Center h="60vh">
+        <AddVaccineImg />
+      </Center>
     );
   };
 
@@ -188,17 +224,18 @@ function VaccineContent() {
       {getVaccineContent()}
 
       <AddVaccineForm
+        onSubmit={onAddVaccine}
         isOpen={isAddVaccineOpen}
         onClose={onCloseAddVaccine}
-        onSubmit={onAddVaccine}
         isAdding={isPerformingAction}
       ></AddVaccineForm>
 
       <EditVaccineForm
-        isOpen={isEditVaccineOpen}
         onSubmit={onEditVaccine}
         vaccine={selectedVaccine}
+        isOpen={isEditVaccineOpen}
         onClose={onCloseEditVaccine}
+        isEditing={isPerformingAction}
       />
 
       <DeleteConfirmationDialog
@@ -206,6 +243,7 @@ function VaccineContent() {
         onClick={onDeleteVaccine}
         isOpen={isDeleteVaccineOpen}
         onClose={onCloseDeleteVaccine}
+        isDeleting={isPerformingAction}
         dialogSubheader="Are you sure? You want to delete the vaccine?"
       />
 

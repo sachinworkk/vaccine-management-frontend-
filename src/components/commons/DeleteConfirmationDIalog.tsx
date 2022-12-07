@@ -10,7 +10,9 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 
-function DeleteConfirmationDialog(props: any) {
+import { deleteConfirmationDialog } from "../../types/props";
+
+function DeleteConfirmationDialog(props: deleteConfirmationDialog) {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
 
   return (
@@ -32,7 +34,12 @@ function DeleteConfirmationDialog(props: any) {
               <Button ref={cancelRef} onClick={props.onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" onClick={props.onClick} ml={3}>
+              <Button
+                ml={3}
+                colorScheme="red"
+                onClick={props.onClick}
+                isLoading={props.isDeleting}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

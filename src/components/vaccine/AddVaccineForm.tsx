@@ -26,9 +26,10 @@ import { Controller, useForm } from "react-hook-form";
 
 import FormData from "form-data";
 
+import { addVaccineForm } from "../../types/props";
 import { VaccinePayload } from "../../types/vaccinePayload";
 
-function AddVaccineForm(props: any) {
+function AddVaccineForm(props: addVaccineForm) {
   const {
     register,
     control,
