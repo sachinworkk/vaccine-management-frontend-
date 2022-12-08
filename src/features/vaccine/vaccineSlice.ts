@@ -75,11 +75,11 @@ const vaccineSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getVaccines.fulfilled, (state: any, { payload }) => {
-      const { data: vaccines } = payload;
+      const { data } = payload;
 
       state.isLoading = false;
 
-      state.vaccines = vaccines.data.data;
+      state.vaccines = data.vaccines;
     });
     builder.addCase(getVaccines.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
@@ -89,11 +89,11 @@ const vaccineSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getVaccineById.fulfilled, (state: any, { payload }) => {
-      const { data: vaccine } = payload;
+      const { data } = payload;
 
       state.isLoading = false;
 
-      state.selectedVaccine = vaccine.data;
+      state.selectedVaccine = data.vaccine;
     });
     builder.addCase(getVaccineById.rejected, (state: any, { payload }: any) => {
       state.isLoading = false;
