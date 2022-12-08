@@ -133,8 +133,12 @@ http.interceptors.response.use(
         err.response.data.message === "Invalid session"
       ) {
         originalConfig._retry = true;
+
         saveAccessToken("");
         saveRefreshToken("");
+
+        window.location.reload();
+        return http(originalConfig);
       }
     }
     return Promise.reject(err);

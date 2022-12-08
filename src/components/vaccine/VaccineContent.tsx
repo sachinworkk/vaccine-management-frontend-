@@ -87,7 +87,7 @@ function VaccineContent() {
 
   const onAddVaccine = async (data: FormData) => {
     try {
-      await dispatch(postVaccine(data));
+      await dispatch(postVaccine(data)).unwrap();
 
       onCloseAddVaccine();
 
@@ -99,10 +99,10 @@ function VaccineContent() {
 
       dispatch(resetSelectedVaccine());
 
-      await dispatch(getVaccines({}));
+      await dispatch(getVaccines({})).unwrap();
     } catch (error) {
       toast({
-        title: (error as AppError).data?.details,
+        title: (error as AppError).details,
         status: "error",
         isClosable: true,
       });
@@ -111,7 +111,7 @@ function VaccineContent() {
 
   const onDeleteVaccine = async () => {
     try {
-      await dispatch(deleteVaccine(selectedVaccine?.id));
+      await dispatch(deleteVaccine(selectedVaccine?.id)).unwrap();
 
       onCloseDeleteVaccine();
 
@@ -123,10 +123,10 @@ function VaccineContent() {
 
       dispatch(resetSelectedVaccine());
 
-      await dispatch(getVaccines({}));
+      await dispatch(getVaccines({})).unwrap();
     } catch (error) {
       toast({
-        title: (error as AppError).data?.details,
+        title: (error as AppError)?.details,
         status: "error",
         isClosable: true,
       });
@@ -135,7 +135,7 @@ function VaccineContent() {
 
   const onEditVaccine = async (data: FormData, id: number | undefined) => {
     try {
-      await dispatch(editVaccine({ id, data }));
+      await dispatch(editVaccine({ id, data })).unwrap();
 
       onCloseEditVaccine();
 
@@ -147,10 +147,10 @@ function VaccineContent() {
 
       dispatch(resetSelectedVaccine());
 
-      await dispatch(getVaccines({}));
+      await dispatch(getVaccines({})).unwrap();
     } catch (error) {
       toast({
-        title: (error as AppError).data?.details,
+        title: (error as AppError).details,
         status: "error",
         isClosable: true,
       });

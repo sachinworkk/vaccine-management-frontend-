@@ -44,7 +44,7 @@ function SignUpForm() {
 
   const onSubmit = async (data: UserSignUp) => {
     try {
-      await dispatch(signUpUser(data));
+      await dispatch(signUpUser(data)).unwrap();
 
       toast({
         title: "User successfully registered",
@@ -55,7 +55,7 @@ function SignUpForm() {
       navigate(routes.SIGN_IN);
     } catch (error) {
       toast({
-        title: (error as AppError).data?.details,
+        title: (error as AppError).details,
         status: "error",
         isClosable: true,
       });

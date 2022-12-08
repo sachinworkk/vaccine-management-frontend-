@@ -10,7 +10,7 @@ export const getVaccinesThunk = async ({}, { rejectWithValue }: any) => {
   try {
     const resp = await getVaccines();
 
-    return resp;
+    return resp?.data?.vaccines;
   } catch (error: any) {
     return rejectWithValue(error);
   }
@@ -23,7 +23,7 @@ export const getVaccineByIdThunk = async (
   try {
     const resp = await getVaccineById(id);
 
-    return resp;
+    return resp?.data?.vaccine;
   } catch (error: any) {
     return rejectWithValue(error);
   }
@@ -36,9 +36,15 @@ export const postVaccineThunk = async (
   try {
     const resp = await postVaccine(payload);
 
-    return resp;
+    return resp?.data;
   } catch (error: any) {
-    return rejectWithValue(error.response);
+    if (error.response.data.type === "ValidationError") {
+      return rejectWithValue({
+        details: "Invalid Form Data",
+      });
+    }
+
+    return rejectWithValue(error.response?.data);
   }
 };
 
@@ -49,9 +55,15 @@ export const editVaccineThunk = async (
   try {
     const resp = await editVaccine(payload.id, payload.data);
 
-    return resp;
+    return resp?.data;
   } catch (error: any) {
-    return rejectWithValue(error.response);
+    if (error.response.data.type === "ValidationError") {
+      return rejectWithValue({
+        details: "Invalid Form Data",
+      });
+    }
+
+    return rejectWithValue(error.response?.data);
   }
 };
 
@@ -59,8 +71,8 @@ export const deleteVaccineThunk = async (id: any, { rejectWithValue }: any) => {
   try {
     const resp = await deleteVaccine(id);
 
-    return resp;
+    return resp?.data;
   } catch (error: any) {
-    return rejectWithValue(error.response);
+    return rejectWithValue(error.response?.data);
   }
 };

@@ -13,9 +13,13 @@ export const loginUserThunk = async (
   try {
     const resp = await loginUser(payload);
 
-    return resp;
+    return {
+      user: resp?.data?.user,
+      accessToken: resp?.data?.accessToken,
+      refreshToken: resp?.data?.refreshToken,
+    };
   } catch (error: any) {
-    return rejectWithValue(error.response);
+    return rejectWithValue(error.response?.data);
   }
 };
 
@@ -23,9 +27,9 @@ export const signOutUserThunk = async ({ rejectWithValue }: any) => {
   try {
     const resp = await signOutUser();
 
-    return resp;
+    return resp?.data?.details;
   } catch (error: any) {
-    return rejectWithValue(error.response);
+    return rejectWithValue(error.response?.data);
   }
 };
 
@@ -36,8 +40,8 @@ export const signUpUserThunk = async (
   try {
     const resp = await signUpUser(payload);
 
-    return resp;
+    return resp?.data?.details;
   } catch (error: any) {
-    return rejectWithValue(error.response);
+    return rejectWithValue(error.response?.data);
   }
 };

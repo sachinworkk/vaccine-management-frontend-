@@ -41,15 +41,14 @@ const userAuthSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(signUpUser.fulfilled, (state: any, { payload }) => {
-      const { data: user } = payload;
-
       state.isLoading = false;
-      state.user = user;
+
+      state.user = payload;
     });
-    builder.addCase(signUpUser.rejected, (state: any, { payload }: any) => {
+    builder.addCase(signUpUser.rejected, (state: any, { payload }) => {
       state.isLoading = false;
 
-      state.error = payload.data.details;
+      state.error = payload;
     });
     builder.addCase(loginUser.pending, (state: any) => {
       state.isLoading = true;
@@ -60,10 +59,10 @@ const userAuthSlice = createSlice({
       state.isLoading = false;
       state.user = user;
     });
-    builder.addCase(loginUser.rejected, (state: any, { payload }: any) => {
+    builder.addCase(loginUser.rejected, (state: any, { payload }) => {
       state.isLoading = false;
 
-      state.error = payload.data.details;
+      state.error = payload;
     });
     builder.addCase(signOutUser.pending, (state: any) => {
       state.isLoading = true;
@@ -71,8 +70,8 @@ const userAuthSlice = createSlice({
     builder.addCase(signOutUser.fulfilled, (state: any) => {
       state.isLoading = false;
     });
-    builder.addCase(signOutUser.rejected, (state: any, { payload }: any) => {
-      state.error = payload.data.details;
+    builder.addCase(signOutUser.rejected, (state: any, { payload }) => {
+      state.error = payload;
     });
   },
 });

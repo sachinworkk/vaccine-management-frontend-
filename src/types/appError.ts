@@ -1,3 +1,4 @@
 export interface AppError {
-  data: { details: string };
+  details?: string;
+  message?: string;
 }

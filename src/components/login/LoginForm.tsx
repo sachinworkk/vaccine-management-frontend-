@@ -45,13 +45,13 @@ function LoginForm() {
     try {
       const resp = await dispatch(loginUser(data)).unwrap();
 
-      saveAccessToken(resp.data.accessToken);
-      saveRefreshToken(resp.data.refreshToken);
+      saveAccessToken(resp.accessToken);
+      saveRefreshToken(resp.refreshToken);
 
       navigate(routes.DASHBOARD);
     } catch (error) {
       toast({
-        title: (error as AppError).data?.details,
+        title: (error as AppError).details,
         status: "error",
         isClosable: true,
       });
