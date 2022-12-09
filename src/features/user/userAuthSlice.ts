@@ -71,6 +71,8 @@ const userAuthSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(signOutUser.rejected, (state: any, { payload }) => {
+      state.isLoading = false;
+
       state.error = payload;
     });
   },
