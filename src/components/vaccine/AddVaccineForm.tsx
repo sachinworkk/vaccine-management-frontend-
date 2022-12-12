@@ -83,12 +83,40 @@ function AddVaccineForm(props: addVaccineForm) {
                     placeholder="Please enter name"
                     {...register("name", {
                       required: "Name is required",
+                      maxLength: {
+                        value: 150,
+                        message: "Name is too long",
+                      },
                     })}
                   />
                   <FormErrorMessage>
                     {errors.name && errors.name.message?.toString()}
                   </FormErrorMessage>
                 </FormControl>
+
+                <Controller
+                  name="numberOfDoses"
+                  control={control}
+                  rules={{ required: "Number of doses is required" }}
+                  render={({ field: { onChange, value } }) => (
+                    <FormControl isInvalid={Boolean(errors.numberOfDoses)}>
+                      <FormLabel>Number of Doses</FormLabel>
+
+                      <NumberInput value={value} onChange={onChange}>
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+
+                      <FormErrorMessage>
+                        {errors.numberOfDoses &&
+                          errors.numberOfDoses.message?.toString()}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                ></Controller>
 
                 <Controller
                   name="stage"
@@ -120,47 +148,13 @@ function AddVaccineForm(props: addVaccineForm) {
                 ></Controller>
 
                 <Controller
-                  name="description"
+                  name="isMandatory"
                   control={control}
-                  rules={{ required: "Description is required" }}
                   render={({ field: { onChange, value } }) => (
-                    <FormControl isInvalid={Boolean(errors.description)}>
-                      <FormLabel>Description</FormLabel>
-
-                      <Textarea
-                        placeholder="Please enter description"
-                        value={value}
-                        onChange={onChange}
-                      />
-
-                      <FormErrorMessage>
-                        {errors.description &&
-                          errors.description.message?.toString()}
-                      </FormErrorMessage>
-                    </FormControl>
-                  )}
-                ></Controller>
-
-                <Controller
-                  name="numberOfDoses"
-                  control={control}
-                  rules={{ required: "Number of doses is required" }}
-                  render={({ field: { onChange, value } }) => (
-                    <FormControl isInvalid={Boolean(errors.numberOfDoses)}>
-                      <FormLabel>Number of Doses</FormLabel>
-
-                      <NumberInput value={value} onChange={onChange}>
-                        <NumberInputField />
-                        <NumberInputStepper>
-                          <NumberIncrementStepper />
-                          <NumberDecrementStepper />
-                        </NumberInputStepper>
-                      </NumberInput>
-
-                      <FormErrorMessage>
-                        {errors.numberOfDoses &&
-                          errors.numberOfDoses.message?.toString()}
-                      </FormErrorMessage>
+                    <FormControl>
+                      <Checkbox onChange={onChange} isChecked={value}>
+                        Is mandatory
+                      </Checkbox>
                     </FormControl>
                   )}
                 ></Controller>
@@ -182,13 +176,24 @@ function AddVaccineForm(props: addVaccineForm) {
                 </FormControl>
 
                 <Controller
-                  name="isMandatory"
+                  name="description"
                   control={control}
+                  rules={{ required: "Description is required" }}
                   render={({ field: { onChange, value } }) => (
-                    <FormControl>
-                      <Checkbox onChange={onChange} isChecked={value}>
-                        Is mandatory
-                      </Checkbox>
+                    <FormControl isInvalid={Boolean(errors.description)}>
+                      <FormLabel>Description</FormLabel>
+
+                      <Textarea
+                        rows={6}
+                        placeholder="Please enter description"
+                        value={value}
+                        onChange={onChange}
+                      />
+
+                      <FormErrorMessage>
+                        {errors.description &&
+                          errors.description.message?.toString()}
+                      </FormErrorMessage>
                     </FormControl>
                   )}
                 ></Controller>
