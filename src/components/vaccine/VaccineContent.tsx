@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { FaPen, FaEye, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
 
@@ -34,6 +33,7 @@ import DeleteConfirmationDialog from "../commons/DeleteConfirmationDIalog";
 
 import AddVaccineForm from "./AddVaccineForm";
 import EditVaccineForm from "./EditVaccineForm";
+import VaccineDetailForm from "./VaccineDetailForm";
 
 function VaccineContent() {
   const {
@@ -49,14 +49,18 @@ function VaccineContent() {
   } = useDisclosure();
 
   const {
+    isOpen: isViewVaccineDetailOpen,
+    onOpen: onOpenViewVaccineDetail,
+    onClose: onCloseViewVaccineDetail,
+  } = useDisclosure();
+
+  const {
     isOpen: isEditVaccineOpen,
     onOpen: onOpenEditVaccine,
     onClose: onCloseEditVaccine,
   } = useDisclosure();
 
   const toast = useToast();
-
-  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
@@ -77,6 +81,12 @@ function VaccineContent() {
     dispatch(selectVaccine(item));
 
     onOpenEditVaccine();
+  };
+
+  const openViewVaccineDetail = (item: VaccinePayload) => {
+    dispatch(selectVaccine(item));
+
+    onOpenViewVaccineDetail();
   };
 
   const openDeleteVaccine = (item: VaccinePayload) => {
@@ -214,7 +224,7 @@ function VaccineContent() {
                   variant="ghost"
                   colorScheme="teal"
                   onClick={() => {
-                    navigate(`/vaccine/${item.id}`);
+                    openViewVaccineDetail(item);
                   }}
                 />
 
@@ -259,6 +269,12 @@ function VaccineContent() {
         isOpen={isEditVaccineOpen}
         onClose={onCloseEditVaccine}
         isEditing={isPerformingAction}
+      />
+
+      <VaccineDetailForm
+        vaccine={selectedVaccine}
+        isOpen={isViewVaccineDetailOpen}
+        onClose={onCloseViewVaccineDetail}
       />
 
       <DeleteConfirmationDialog
