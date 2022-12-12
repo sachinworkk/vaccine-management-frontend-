@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { FaPen, FaEye, FaTrash } from "react-icons/fa";
+import { FaPen, FaEye, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
 
 import {
   Box,
@@ -177,6 +177,12 @@ function VaccineContent() {
           {
             label: "Number Of Doses",
             renderCell: (item: VaccinePayload) => item.numberOfDoses,
+          },
+          {
+            label: "Mandatory",
+            renderCell: (item: VaccinePayload) => {
+              return item?.isMandatory ? <FaCheck /> : <FaTimes />;
+            },
           },
           {
             label: "Stage",
