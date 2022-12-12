@@ -26,9 +26,12 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import FormData from "form-data";
+import { joiResolver } from "@hookform/resolvers/joi";
 
 import { addVaccineForm } from "../../types/props";
 import { VaccinePayload } from "../../types/vaccinePayload";
+
+import { vaccineSchema } from "../../schemas/vaccineSchema";
 
 function AddVaccineForm(props: addVaccineForm) {
   const {
@@ -37,7 +40,7 @@ function AddVaccineForm(props: addVaccineForm) {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: joiResolver(vaccineSchema) });
 
   useEffect(() => {
     reset({ ...props.vaccine });
@@ -61,6 +64,7 @@ function AddVaccineForm(props: addVaccineForm) {
 
   return (
     <>
+      {console.log(errors)}
       <Modal isOpen={props.isOpen} onClose={props.onClose}>
         <ModalOverlay />
 
@@ -71,9 +75,9 @@ function AddVaccineForm(props: addVaccineForm) {
           <ModalBody>
             <form
               id="add-vaccine-form"
-              onSubmit={handleSubmit((data) =>
-                handleAddVaccine(data as VaccinePayload)
-              )}
+              onSubmit={handleSubmit((data) => {
+                handleAddVaccine(data as VaccinePayload);
+              })}
             >
               <Box p={4} display="flex" flexDirection="column" gap="16px">
                 <FormControl isInvalid={Boolean(errors.name)}>
@@ -81,13 +85,7 @@ function AddVaccineForm(props: addVaccineForm) {
                   <Input
                     type="name"
                     placeholder="Please enter name"
-                    {...register("name", {
-                      required: "Name is required",
-                      maxLength: {
-                        value: 150,
-                        message: "Name is too long",
-                      },
-                    })}
+                    {...register("name")}
                   />
                   <FormErrorMessage>
                     {errors.name && errors.name.message?.toString()}
@@ -97,7 +95,6 @@ function AddVaccineForm(props: addVaccineForm) {
                 <Controller
                   name="numberOfDoses"
                   control={control}
-                  rules={{ required: "Number of doses is required" }}
                   render={({ field: { onChange, value } }) => (
                     <FormControl isInvalid={Boolean(errors.numberOfDoses)}>
                       <FormLabel>Number of Doses</FormLabel>
@@ -121,7 +118,6 @@ function AddVaccineForm(props: addVaccineForm) {
                 <Controller
                   name="stage"
                   control={control}
-                  rules={{ required: "Stage is required" }}
                   render={({ field: { onChange, value } }) => (
                     <FormControl isInvalid={Boolean(errors.stage)}>
                       <FormLabel>Stage</FormLabel>
@@ -165,9 +161,7 @@ function AddVaccineForm(props: addVaccineForm) {
                     type="file"
                     variant="flushed"
                     accept="image/png, image/jpeg"
-                    {...register("file", {
-                      required: "Vaccine image is required",
-                    })}
+                    {...register("file")}
                   />
 
                   <FormErrorMessage>
@@ -178,7 +172,6 @@ function AddVaccineForm(props: addVaccineForm) {
                 <Controller
                   name="description"
                   control={control}
-                  rules={{ required: "Description is required" }}
                   render={({ field: { onChange, value } }) => (
                     <FormControl isInvalid={Boolean(errors.description)}>
                       <FormLabel>Description</FormLabel>

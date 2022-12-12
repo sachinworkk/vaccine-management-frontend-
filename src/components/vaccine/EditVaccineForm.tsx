@@ -27,9 +27,12 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import FormData from "form-data";
+import { joiResolver } from "@hookform/resolvers/joi";
 
 import { editVaccineForm } from "../../types/props";
 import { VaccinePayload } from "../../types/vaccinePayload";
+
+import { vaccineSchema } from "../../schemas/vaccineSchema";
 
 function EditVaccineForm(props: editVaccineForm) {
   const {
@@ -38,7 +41,7 @@ function EditVaccineForm(props: editVaccineForm) {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm();
+  } = useForm({ resolver: joiResolver(vaccineSchema) });
 
   useEffect(() => {
     reset({ ...props.vaccine });
@@ -88,13 +91,7 @@ function EditVaccineForm(props: editVaccineForm) {
                   <Input
                     type="name"
                     placeholder="Please enter name"
-                    {...register("name", {
-                      required: "Name is required",
-                      maxLength: {
-                        value: 150,
-                        message: "Name is too long",
-                      },
-                    })}
+                    {...register("name")}
                   />
                   <FormErrorMessage>
                     {errors.name && errors.name.message?.toString()}
@@ -104,7 +101,6 @@ function EditVaccineForm(props: editVaccineForm) {
                 <Controller
                   name="numberOfDoses"
                   control={control}
-                  rules={{ required: "Number of doses is required" }}
                   render={({ field: { onChange, value } }) => (
                     <FormControl isInvalid={Boolean(errors.numberOfDoses)}>
                       <FormLabel>Number of Doses</FormLabel>
@@ -128,7 +124,6 @@ function EditVaccineForm(props: editVaccineForm) {
                 <Controller
                   name="stage"
                   control={control}
-                  rules={{ required: "Stage is required" }}
                   render={({ field: { onChange, value } }) => (
                     <FormControl isInvalid={Boolean(errors.stage)}>
                       <FormLabel>Stage</FormLabel>
@@ -198,7 +193,6 @@ function EditVaccineForm(props: editVaccineForm) {
                 <Controller
                   name="description"
                   control={control}
-                  rules={{ required: "Description is required" }}
                   render={({ field: { onChange, value } }) => (
                     <FormControl isInvalid={Boolean(errors.description)}>
                       <FormLabel>Description</FormLabel>
