@@ -7,11 +7,14 @@
     "@chakra-ui/react": "^2.4.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@hapi/joi": "^17.1.1",
+    "@hookform/resolvers": "^2.9.10",
     "@reduxjs/toolkit": "^1.9.0",
     "@table-library/react-table-library": "^4.0.23",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/hapi__joi": "^17.1.8",
     "@types/jest": "^27.0.1",
     "@types/js-cookie": "^3.0.2",
     "@types/node": "^16.7.13",
@@ -33,7 +36,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

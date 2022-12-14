@@ -37,13 +37,14 @@ const initialState = {
   vaccines: [],
   vaccinePayload: {},
   selectedVaccine: {
-    id: "",
+    id: null,
     name: "",
     description: "",
     stage: "",
     isMandatory: false,
     numberOfDoses: 0,
     vaccineImageUrl: "",
+    file: null,
   },
   isLoading: false,
   isPerformingAction: false,
@@ -58,13 +59,14 @@ const vaccineSlice = createSlice({
     },
     resetSelectedVaccine: (state) => {
       state.selectedVaccine = {
-        id: "",
+        id: null,
         name: "",
         description: "",
         stage: "",
         isMandatory: false,
         numberOfDoses: 0,
         vaccineImageUrl: "",
+        file: null,
       };
       state.isLoading = false;
       state.isPerformingAction = false;

@@ -15,11 +15,14 @@ import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
 
 import * as routes from "../../routes/routes";
 
 import { AppError } from "../../types/appError";
 import { UserLogin } from "../../types/userLogin";
+
+import { signInSchema } from "../../schemas/signInSchema";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
@@ -37,7 +40,7 @@ function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: joiResolver(signInSchema) });
 
   const { isLoading } = useAppSelector((state) => state.auth);
 
@@ -92,9 +95,7 @@ function LoginForm() {
                 <Input
                   type="email"
                   placeholder="Please enter email address"
-                  {...register("email", {
-                    required: "Email address is required",
-                  })}
+                  {...register("email")}
                 />
 
                 <FormErrorMessage>
@@ -107,9 +108,7 @@ function LoginForm() {
                 <Input
                   type="password"
                   placeholder="Please enter password"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
+                  {...register("password")}
                 />
 
                 <FormErrorMessage>

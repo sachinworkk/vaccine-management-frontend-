@@ -11,6 +11,19 @@ export interface dataTable {
   numberOfItemsPerPage: number;
 }
 
+export interface vaccineDetailForm {
+  isOpen: boolean;
+  onClose: () => void;
+  vaccine: {
+    name: string;
+    stage: string;
+    description: string;
+    isMandatory: boolean;
+    numberOfDoses: number;
+    vaccineImageUrl?: string;
+  };
+}
+
 export interface addVaccineForm {
   isOpen: boolean;
   onClose: () => void;

@@ -15,6 +15,7 @@ import {
 import { useToast } from "@chakra-ui/react";
 
 import { Controller, useForm } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
 
 import { useNavigate } from "react-router-dom";
 
@@ -25,6 +26,8 @@ import { UserSignUp } from "../../types/userSingUp";
 
 import { useAppDispatch } from "../../hooks/hooks";
 
+import { signUpSchema } from "../../schemas/signUpSchema";
+
 import { signUpUser, clearState } from "../../features/user/userAuthSlice";
 
 function SignUpForm() {
@@ -33,12 +36,11 @@ function SignUpForm() {
   const navigate = useNavigate();
 
   const {
-    watch,
     register,
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm();
+  } = useForm({ resolver: joiResolver(signUpSchema) });
 
   const dispatch = useAppDispatch();
 
@@ -63,8 +65,6 @@ function SignUpForm() {
       dispatch(clearState());
     }
   };
-
-  const password = watch("password", "");
 
   return (
     <Box p={8} minWidth="400px" borderWidth={1} borderRadius={8} boxShadow="lg">
@@ -95,7 +95,6 @@ function SignUpForm() {
             <Controller
               name="gender"
               control={control}
-              rules={{ required: "Gender is required" }}
               render={({ field: { onChange, value } }) => (
                 <FormControl isInvalid={Boolean(errors.gender)}>
                   <FormLabel>Gender</FormLabel>
@@ -116,13 +115,7 @@ function SignUpForm() {
 
             <FormControl isInvalid={Boolean(errors.dateOfBirth)}>
               <FormLabel>Date Of Birth</FormLabel>
-              <Input
-                size="md"
-                type="date"
-                {...register("dateOfBirth", {
-                  required: "Date of birth is required",
-                })}
-              />
+              <Input size="md" type="date" {...register("dateOfBirth")} />
 
               <FormErrorMessage>
                 {errors.dateOfBirth && errors.dateOfBirth.message?.toString()}
@@ -134,9 +127,7 @@ function SignUpForm() {
               <Input
                 type="address"
                 placeholder="Please enter address"
-                {...register("address", {
-                  required: "Address is required",
-                })}
+                {...register("address")}
               />
 
               <FormErrorMessage>
@@ -149,9 +140,7 @@ function SignUpForm() {
               <Input
                 type="email"
                 placeholder="Please enter email address"
-                {...register("email", {
-                  required: "Email Address is required",
-                })}
+                {...register("email")}
               />
 
               <FormErrorMessage>
@@ -164,9 +153,7 @@ function SignUpForm() {
               <Input
                 type="password"
                 placeholder="Please enter password"
-                {...register("password", {
-                  required: "Password is required",
-                })}
+                {...register("password")}
               />
 
               <FormErrorMessage>
@@ -179,11 +166,7 @@ function SignUpForm() {
               <Input
                 type="password"
                 placeholder="Please enter password"
-                {...register("confirmPassword", {
-                  required: "Password is required",
-                  validate: (value) =>
-                    value === password || "The passwords do not match",
-                })}
+                {...register("confirmPassword")}
               />
 
               <FormErrorMessage>
