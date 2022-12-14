@@ -64,7 +64,6 @@ function AddVaccineForm(props: addVaccineForm) {
 
   return (
     <>
-      {console.log(errors)}
       <Modal isOpen={props.isOpen} onClose={props.onClose}>
         <ModalOverlay />
 
