@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import store from "../redux/store";
+import { setupStore } from "../redux/store";
 import { Provider } from "react-redux";
 
 import * as routes from "../routes/routes";
@@ -17,8 +17,8 @@ import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";
 
 function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Provider store={store}>
+    <Provider store={setupStore()}>
+      <BrowserRouter>
         <Routes>
           <Route element={<AuthenticatedRoutes />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
@@ -32,8 +32,8 @@ function AppRoutes() {
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-      </Provider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   );
 }
 export default AppRoutes;
