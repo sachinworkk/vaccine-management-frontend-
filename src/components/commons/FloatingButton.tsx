@@ -15,6 +15,7 @@ function FloatingButton(props: floatingButton) {
       width="60px"
       height="60px"
       onClick={props.onClick}
+      aria-label="add-button"
     >
       <FiPlus />
     </Button>
