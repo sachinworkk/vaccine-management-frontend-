@@ -26,8 +26,9 @@ import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
-import FormData from "form-data";
 import { joiResolver } from "@hookform/resolvers/joi";
+
+import { getFormData } from "../../utils/formData";
 
 import { editVaccineForm } from "../../types/props";
 import { VaccinePayload } from "../../types/vaccinePayload";
@@ -48,25 +49,7 @@ function EditVaccineForm(props: editVaccineForm) {
   }, [props.vaccine]);
 
   const handleAddVaccine = (data: VaccinePayload) => {
-    const formData = new FormData();
-
-    if (data?.file[0]?.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-      formData.append("vaccineImage", data.file[0]);
-    } else {
-      formData.append("vaccineImageUrl", data.vaccineImageUrl);
-    }
-
-    formData.append("name", data.name);
-
-    formData.append("stage", data.stage);
-    formData.append("description", data.description);
-    formData.append(
-      "isMandatory",
-      data?.isMandatory ? data.isMandatory : false
-    );
-    formData.append("numberOfDoses", data.numberOfDoses);
-
-    props.onSubmit(formData, data.id);
+    props.onSubmit(getFormData(data), data.id);
   };
 
   return (
