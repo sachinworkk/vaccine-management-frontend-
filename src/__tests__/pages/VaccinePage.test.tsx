@@ -32,6 +32,7 @@ const server = setupServer(
       ctx.delay(150)
     );
   }),
+
   rest.post("/vaccine", (req, res, ctx) => {
     vaccinesMockData = [
       ...vaccinesMockData,
@@ -64,6 +65,7 @@ const server = setupServer(
       ctx.delay(150)
     );
   }),
+
   rest.put("/vaccine/1", (req, res, ctx) => {
     vaccinesMockData = vaccinesMockData.map((vaccine) =>
       vaccine.id === 1
@@ -93,6 +95,17 @@ const server = setupServer(
           isMandatory: true,
         },
         message: "Vaccine updated successfullyy",
+      }),
+      ctx.delay(150)
+    );
+  }),
+
+  rest.delete("/vaccine/1", (req, res, ctx) => {
+    vaccinesMockData = vaccinesMockData.filter((vaccine) => vaccine.id !== 1);
+
+    return res(
+      ctx.json({
+        message: "Vaccine deleted successfully",
       }),
       ctx.delay(150)
     );
@@ -293,5 +306,23 @@ describe("VaccineContent", () => {
       "Description cannot be empty"
     );
     expect(descriptionFieldError).toBeInTheDocument();
+  });
+
+  it("Displays all the vaccines in the list except the deleted vaccine when user deletes vaccine", async () => {
+    renderWithProviders(<VaccineContent />);
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    const button = screen.getAllByRole("button", { name: "delete" })[0];
+
+    userEvent.click(button);
+
+    await waitFor(() =>
+      userEvent.click(screen.getByTestId("confirm-delete-vaccine"))
+    );
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    expect(screen.queryByText("Edited Vaccine")).not.toBeInTheDocument();
   });
 });

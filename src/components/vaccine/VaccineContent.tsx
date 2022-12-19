@@ -229,7 +229,7 @@ function VaccineContent() {
                 />
 
                 <IconButton
-                  aria-label="view detail"
+                  aria-label="delete"
                   icon={<FaTrash />}
                   size="xs"
                   variant="ghost"
