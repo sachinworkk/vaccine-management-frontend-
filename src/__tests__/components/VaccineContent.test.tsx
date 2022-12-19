@@ -1,15 +1,16 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
+import { act } from "react-dom/test-utils";
+
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import VaccineContent from "../../components/vaccine/VaccineContent";
 
-import { rest } from "msw";
-
-import { setupServer } from "msw/node";
 import { renderWithProviders } from "../utils/test-utils";
-import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
 
-const vaccinesMockData = [
+let vaccinesMockData = [
   {
     id: 1,
     name: "Phizer",
@@ -32,16 +33,19 @@ const server = setupServer(
     );
   }),
   rest.post("/vaccine", (req, res, ctx) => {
-    vaccinesMockData.push({
-      id: 14,
-      vaccineImageUrl:
-        "https://res.cloudinary.com/dr8t3y3cp/image/upload/v1670903226/vaccine-management/vaccines/btsm2zdjsddhdpxir9vs.png",
-      name: "Added Vaccine",
-      stage: "Exploratory",
-      description: "This is a test vaccine.",
-      numberOfDoses: 2,
-      isMandatory: true,
-    });
+    vaccinesMockData = [
+      ...vaccinesMockData,
+      {
+        id: 14,
+        vaccineImageUrl:
+          "https://res.cloudinary.com/dr8t3y3cp/image/upload/v1670903226/vaccine-management/vaccines/btsm2zdjsddhdpxir9vs.png",
+        name: "Added Vaccine",
+        stage: "Exploratory",
+        description: "This is a test vaccine.",
+        numberOfDoses: 2,
+        isMandatory: true,
+      },
+    ];
 
     return res(
       ctx.json({
@@ -56,6 +60,39 @@ const server = setupServer(
           isMandatory: true,
         },
         message: "Vaccine created successfully",
+      }),
+      ctx.delay(150)
+    );
+  }),
+  rest.put("/vaccine/1", (req, res, ctx) => {
+    vaccinesMockData = vaccinesMockData.map((vaccine) =>
+      vaccine.id === 1
+        ? {
+            id: 1,
+            vaccineImageUrl:
+              "https://res.cloudinary.com/dr8t3y3cp/image/upload/v1670903226/vaccine-management/vaccines/btsm2zdjsddhdpxir9vs.png",
+            name: "Edited Vaccine",
+            stage: "Exploratory",
+            description: "This is a vaccine for COVID.",
+            numberOfDoses: 4,
+            isMandatory: true,
+          }
+        : { ...vaccine }
+    );
+
+    return res(
+      ctx.json({
+        vaccine: {
+          id: 1,
+          vaccineImageUrl:
+            "https://res.cloudinary.com/dr8t3y3cp/image/upload/v1670903226/vaccine-management/vaccines/btsm2zdjsddhdpxir9vs.png",
+          name: "Edited Vaccine",
+          stage: "Exploratory",
+          description: "This is a vaccine for COVID.",
+          numberOfDoses: 4,
+          isMandatory: true,
+        },
+        message: "Vaccine updated successfullyy",
       }),
       ctx.delay(150)
     );
@@ -75,7 +112,7 @@ describe("VaccineContent", () => {
     server.close();
   });
 
-  it("When the vaccine is loading", () => {
+  it("Displays is loading when fetching vaccines", () => {
     renderWithProviders(<VaccineContent />);
 
     const text = screen.queryByText("Loading...")?.innerHTML;
@@ -83,13 +120,13 @@ describe("VaccineContent", () => {
     expect(text).toBe("Loading...");
   });
 
-  it("When the vaccine list contains data", async () => {
+  it("Displays vaccine list once vaccines are fetched", async () => {
     renderWithProviders(<VaccineContent />);
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
   });
 
-  it("When the vaccine list is empty", async () => {
+  it("Displays add vaccine image when vaccine list is empty", async () => {
     server.use(
       rest.get("/vaccine", (req, res, ctx) => {
         return res(
@@ -106,7 +143,7 @@ describe("VaccineContent", () => {
     expect(await screen.findByTestId("vaccine-image")).toBeInTheDocument();
   });
 
-  it("When the vaccine information is filled and Add Vaccine is clicked", async () => {
+  it("Displays added vaccine in the list once user adds the vaccine", async () => {
     renderWithProviders(<VaccineContent />);
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
@@ -167,7 +204,66 @@ describe("VaccineContent", () => {
     expect(addedVaccineText).toBeInTheDocument();
   });
 
-  it("Error validation on add Vaccine", async () => {
+  it("Displays edited vaccine in the list once user edits the existing vaccine", async () => {
+    renderWithProviders(<VaccineContent />);
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    const button = screen.getAllByRole("button", { name: "edit" })[0];
+
+    userEvent.click(button);
+
+    const name = screen.getByRole("textbox", { name: "Full Name" });
+    const description = screen.getByRole("textbox", { name: "Description" });
+    const numberOfDoses = screen.getByRole("spinbutton", {
+      name: "Number of Doses",
+    });
+
+    const stage = screen.getByRole("combobox", {
+      name: "Stage",
+    });
+
+    const isMandatory = screen.getByRole("checkbox", {
+      name: "Is mandatory",
+    });
+
+    const vaccineImageUploader: HTMLInputElement = screen.getByTestId(
+      "vaccine-image-uploader"
+    );
+
+    userEvent.type(name, "Edited Vaccine");
+    userEvent.type(description, "This is a vaccine for COVID.");
+    userEvent.type(numberOfDoses, "4");
+    userEvent.selectOptions(stage, "Exploratory");
+    userEvent.click(isMandatory);
+
+    const fakeFile = new File(["(⌐□_□)"], "chucknorris.png", {
+      type: "image/png",
+      lastModified: Date.now(),
+    });
+
+    await act(async () => {
+      await waitFor(() => {
+        userEvent.upload(vaccineImageUploader, fakeFile);
+      });
+    });
+
+    await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
+
+    await act(async () => {
+      userEvent.click(screen.getByText("Edit"));
+    });
+
+    await waitFor(() => expect(screen.getByText("Edit")).not.toBeInTheDocument);
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    const editedVaccineText = screen.getByText("Edited Vaccine");
+
+    expect(editedVaccineText).toBeInTheDocument();
+  });
+
+  it("Displays error validations while adding vaccine with empty value", async () => {
     renderWithProviders(<VaccineContent />);
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
