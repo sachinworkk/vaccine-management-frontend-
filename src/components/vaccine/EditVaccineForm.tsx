@@ -63,7 +63,7 @@ function EditVaccineForm(props: editVaccineForm) {
 
           <ModalBody>
             <form
-              id="add-vaccine-form"
+              id="edit-vaccine-form"
               onSubmit={handleSubmit((data) =>
                 handleAddVaccine(data as VaccinePayload)
               )}
@@ -165,6 +165,7 @@ function EditVaccineForm(props: editVaccineForm) {
                     type="file"
                     variant="flushed"
                     accept="image/png, image/jpeg"
+                    data-testid="vaccine-image-uploader"
                     {...register("file")}
                   />
 
@@ -202,7 +203,7 @@ function EditVaccineForm(props: editVaccineForm) {
             <Button
               colorScheme="blue"
               type="submit"
-              form="add-vaccine-form"
+              form="edit-vaccine-form"
               isLoading={props.isEditing}
             >
               Edit
