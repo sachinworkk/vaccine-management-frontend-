@@ -77,4 +77,35 @@ describe("LoginForm", () => {
 
     expect(screen.getByText(/Welcome to dashboard page/i)).toBeInTheDocument();
   });
+
+  it("Displays validation errors when empty value was added", async () => {
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/dashboard", "/"]}>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <>
+                <h1>Welcome to dashboard page</h1>
+              </>
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const email = screen.getByLabelText("Email");
+    const password = screen.getByLabelText("Password");
+
+    userEvent.type(email, " ");
+    userEvent.type(password, " ");
+
+    await act(async () => {
+      userEvent.click(screen.getByText("Sign In"));
+    });
+
+    expect(screen.getByText("Email cannot be empty")).toBeInTheDocument;
+    expect(screen.getByText("Password cannot be empty")).toBeInTheDocument;
+  });
 });
