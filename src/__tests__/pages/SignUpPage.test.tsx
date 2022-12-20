@@ -61,11 +61,13 @@ describe("SignUp Page", () => {
       </MemoryRouter>
     );
 
-    const email = screen.getByLabelText("Email");
-    const gender = screen.getByLabelText("Male");
-    const address = screen.getByLabelText("Address");
+    const email = screen.getByRole("textbox", { name: "Email" });
+    const gender = screen.getByRole("radio", {
+      name: "Male",
+    });
+    const address = screen.getByRole("textbox", { name: "Address" });
     const password = screen.getByLabelText("Password");
-    const fullName = screen.getByLabelText("Full Name");
+    const fullName = screen.getByRole("textbox", { name: "Full Name" });
     const dateOfBirth = screen.getByLabelText("Date Of Birth");
     const confirmPassword = screen.getByLabelText("Confirm Password");
 
@@ -78,7 +80,11 @@ describe("SignUp Page", () => {
     userEvent.type(confirmPassword, "password");
 
     await act(async () => {
-      userEvent.click(screen.getByTestId("sign-up-btn"));
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Sign Up",
+        })
+      );
     });
 
     await screen.findByText(/Welcome to login page/i);
@@ -120,7 +126,11 @@ describe("SignUp Page", () => {
     userEvent.type(confirmPassword, " ");
 
     await act(async () => {
-      userEvent.click(screen.getByTestId("sign-up-btn"));
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Sign Up",
+        })
+      );
     });
 
     expect(screen.getByText("Name cannot be empty")).toBeInTheDocument;

@@ -175,7 +175,7 @@ function SignUpForm() {
               </FormErrorMessage>
             </FormControl>
           </Stack>
-          <Button width="full" mt={8} type="submit" data-testid="sign-up-btn">
+          <Button width="full" mt={8} type="submit">
             Sign Up
           </Button>
           <Box mt={4}>

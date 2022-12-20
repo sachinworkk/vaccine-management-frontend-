@@ -246,7 +246,7 @@ function VaccineContent() {
       ></DataTable>
     ) : (
       <Center h="60vh">
-        <AddVaccineImg data-testid="vaccine-image" />
+        <AddVaccineImg />
       </Center>
     );
   };

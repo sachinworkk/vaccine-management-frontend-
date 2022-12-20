@@ -149,7 +149,6 @@ function AddVaccineForm(props: addVaccineForm) {
                     type="file"
                     variant="flushed"
                     accept="image/png, image/jpeg"
-                    data-testid="vaccine-image-uploader"
                     {...register("file")}
                   />
 

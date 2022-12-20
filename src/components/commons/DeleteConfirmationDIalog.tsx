@@ -39,7 +39,6 @@ function DeleteConfirmationDialog(props: deleteConfirmationDialog) {
                 colorScheme="red"
                 onClick={props.onClick}
                 isLoading={props.isDeleting}
-                data-testid="confirm-delete-vaccine"
               >
                 Delete
               </Button>

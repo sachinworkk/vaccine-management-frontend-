@@ -128,7 +128,7 @@ describe("VaccineContent", () => {
   it("Displays is loading when fetching vaccines", () => {
     renderWithProviders(<VaccineContent />);
 
-    const text = screen.queryByText("Loading...")?.innerHTML;
+    const text = screen.getByText("Loading...")?.innerHTML;
 
     expect(text).toBe("Loading...");
   });
@@ -153,7 +153,9 @@ describe("VaccineContent", () => {
 
     renderWithProviders(<VaccineContent />);
 
-    expect(await screen.findByTestId("vaccine-image")).toBeInTheDocument();
+    const addVaccineImageElement = await screen.findByText("AddVaccine.svg");
+
+    expect(addVaccineImageElement?.innerHTML).toBe("AddVaccine.svg");
   });
 
   it("Displays added vaccine in the list once user adds the vaccine", async () => {
@@ -181,9 +183,8 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement = screen.getByTestId(
-      "vaccine-image-uploader"
-    );
+    const vaccineImageUploader: HTMLInputElement =
+      screen.getByLabelText("Vaccine Image");
 
     userEvent.type(name, "Added Vaccine");
     userEvent.type(description, "This is a test vaccine");
@@ -205,7 +206,11 @@ describe("VaccineContent", () => {
     await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
 
     await act(async () => {
-      userEvent.click(screen.getByText("Add"));
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Add",
+        })
+      );
     });
 
     await waitFor(() => expect(screen.getByText("Add")).not.toBeInTheDocument);
@@ -240,9 +245,8 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement = screen.getByTestId(
-      "vaccine-image-uploader"
-    );
+    const vaccineImageUploader: HTMLInputElement =
+      screen.getByLabelText("Vaccine Image");
 
     userEvent.type(name, "Edited Vaccine");
     userEvent.type(description, "This is a vaccine for COVID.");
@@ -264,7 +268,11 @@ describe("VaccineContent", () => {
     await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
 
     await act(async () => {
-      userEvent.click(screen.getByText("Edit"));
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Edit",
+        })
+      );
     });
 
     await waitFor(() => expect(screen.getByText("Edit")).not.toBeInTheDocument);
@@ -318,7 +326,11 @@ describe("VaccineContent", () => {
     userEvent.click(button);
 
     await waitFor(() =>
-      userEvent.click(screen.getByTestId("confirm-delete-vaccine"))
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Delete",
+        })
+      )
     );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
