@@ -152,7 +152,7 @@ function EditVaccineForm(props: editVaccineForm) {
                 ></Controller>
 
                 <FormControl>
-                  <FormLabel>Vaccine Image</FormLabel>
+                  <FormLabel>Current Vaccine Image</FormLabel>
 
                   <Controller
                     name="vaccineImageUrl"

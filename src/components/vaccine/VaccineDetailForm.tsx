@@ -1,25 +1,37 @@
 import {
+  Box,
+  Flex,
   Modal,
+  Input,
+  Image,
   Button,
+  VStack,
   Divider,
+  Heading,
+  Textarea,
+  Checkbox,
   ModalBody,
   ModalHeader,
   ModalFooter,
   ModalContent,
   ModalOverlay,
-  Box,
-  Heading,
-  VStack,
-  Input,
-  Textarea,
-  Checkbox,
-  Flex,
-  Image,
 } from "@chakra-ui/react";
-import { FaCheck, FaTimes } from "react-icons/fa";
+
+import "react-image-lightbox/style.css";
+import Lightbox from "react-image-lightbox";
+
 import { vaccineDetailForm } from "../../types/props";
+import { useEffect, useState } from "react";
 
 function VaccineDetailForm(props: vaccineDetailForm) {
+  const [isImageLightBoxOpen, setIsOpenImageLightBox] = useState(false);
+
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    setTimeout(() => setKey(key + 1));
+  }, [isImageLightBoxOpen]);
+
   return (
     <>
       <Modal isOpen={props.isOpen} onClose={props.onClose}>
@@ -68,10 +80,24 @@ function VaccineDetailForm(props: vaccineDetailForm) {
                 </Heading>
                 <Image
                   boxSize="50"
+                  onClick={() => setIsOpenImageLightBox(true)}
                   src={props.vaccine?.vaccineImageUrl || ""}
                   alt="Vaccine Image"
                   fallbackSrc="https://via.placeholder.com/400?text=Image+Not+Available"
                 />
+
+                {isImageLightBoxOpen && (
+                  <Lightbox
+                    key={key}
+                    mainSrc={props.vaccine?.vaccineImageUrl || ""}
+                    onCloseRequest={() => setIsOpenImageLightBox(false)}
+                    reactModalStyle={{
+                      overlay: {
+                        zIndex: 1500000,
+                      },
+                    }}
+                  />
+                )}
               </Flex>
 
               <Flex flexDirection="column" gap="2">
