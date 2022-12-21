@@ -140,4 +140,56 @@ describe("SignUp Page", () => {
     expect(screen.getByText("Password cannot be empty")).toBeInTheDocument;
     expect(screen.getByText("Password does not match")).toBeInTheDocument;
   });
+
+  it("Displays validation errors when invalid value was provided", async () => {
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/signIn", "/"]}>
+        <Routes>
+          <Route path="/" element={<SignUpPage />} />
+          <Route
+            path="/signIn"
+            element={
+              <>
+                <h1>Welcome to login page</h1>
+              </>
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const email = screen.getByLabelText("Email");
+    const gender = screen.getByLabelText("Male");
+    const address = screen.getByLabelText("Address");
+    const password = screen.getByLabelText("Password");
+    const fullName = screen.getByLabelText("Full Name");
+    const dateOfBirth = screen.getByLabelText("Date Of Birth");
+    const confirmPassword = screen.getByLabelText("Confirm Password");
+
+    userEvent.click(gender);
+    userEvent.type(address, "Admin");
+    userEvent.type(fullName, "Admin");
+    userEvent.type(password, "password");
+    userEvent.type(email, "test");
+    await userEvent.type(dateOfBirth, new Date().toISOString());
+    userEvent.type(confirmPassword, "password123");
+
+    await act(async () => {
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Sign Up",
+        })
+      );
+    });
+
+    expect(
+      screen.getByText(
+        `"Date of birth" age must be larger than or equal to 18 years old`
+      )
+    ).toBeInTheDocument;
+
+    expect(screen.getByText(`Please provide a valid email`)).toBeInTheDocument;
+
+    expect(screen.getByText(`Password does not match`)).toBeInTheDocument;
+  });
 });

@@ -354,6 +354,80 @@ describe("VaccineContent", () => {
     expect(descriptionFieldError).toBeInTheDocument();
   });
 
+  it("Displays error validations while adding vaccine with invalid value", async () => {
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    expect(
+      await screen.findByRole("button", { name: "add-button" })
+    ).toBeInTheDocument();
+
+    userEvent.click(screen.getByRole("button", { name: "add-button" }));
+
+    const name = screen.getByRole("textbox", { name: "Full Name" });
+    const description = screen.getByRole("textbox", { name: "Description" });
+    const numberOfDoses = screen.getByRole("spinbutton", {
+      name: "Number of Doses",
+    });
+
+    const stage = screen.getByRole("combobox", {
+      name: "Stage",
+    });
+
+    const isMandatory = screen.getByRole("checkbox", {
+      name: "Is mandatory",
+    });
+
+    const vaccineImageUploader: HTMLInputElement =
+      screen.getByLabelText("Vaccine Image");
+
+    userEvent.type(name, "Sachin       ");
+    userEvent.type(description, "         ");
+    userEvent.type(numberOfDoses, "2147483649");
+    userEvent.selectOptions(stage, "Exploratory");
+    userEvent.click(isMandatory);
+
+    const fakeFile = new File(["(⌐□_□)"], "chucknorris.png", {
+      type: "image/png",
+      lastModified: Date.now(),
+    });
+
+    await act(async () => {
+      await waitFor(() => {
+        userEvent.upload(vaccineImageUploader, fakeFile);
+      });
+    });
+
+    await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
+
+    await act(async () => {
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Add",
+        })
+      );
+    });
+
+    await waitFor(() => expect(screen.getByText("Add")).not.toBeInTheDocument);
+
+    const maximumNumberOfDosesError = await screen.findByText(
+      "Number of doses cannot be more than 2147483647"
+    );
+    expect(maximumNumberOfDosesError).toBeInTheDocument();
+
+    const descriptionFieldError = await screen.findByText(
+      "Description cannot be empty"
+    );
+    expect(descriptionFieldError).toBeInTheDocument();
+  });
+
   it("Displays all the vaccines in the list except the deleted vaccine when user deletes vaccine", async () => {
     renderWithProviders(
       <MemoryRouter initialEntries={["/vaccine"]}>
