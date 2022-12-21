@@ -1,0 +1,8 @@
+export const NUMBER_OF_DOSES = {
+  MAX_NUMBER: 2147483647,
+  MIN_NUMBER: 1,
+};
+
+export const VACCINE_NAME = {
+  MAX_NUMBER_OF_CHARACTERS: 150,
+};

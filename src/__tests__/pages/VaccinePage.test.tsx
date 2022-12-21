@@ -6,9 +6,11 @@ import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import VaccineContent from "../../components/vaccine/VaccineContent";
-
 import { renderWithProviders } from "../utils/test-utils";
+
+import VaccinePage from "../../pages/VaccinPage";
+
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 let vaccinesMockData = [
   {
@@ -126,7 +128,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays is loading when fetching vaccines", () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     const text = screen.getByText("Loading...")?.innerHTML;
 
@@ -134,7 +142,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays vaccine list once vaccines are fetched", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
   });
@@ -151,7 +165,13 @@ describe("VaccineContent", () => {
       })
     );
 
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     const addVaccineImageElement = await screen.findByText("AddVaccine.svg");
 
@@ -159,7 +179,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays added vaccine in the list once user adds the vaccine", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 
@@ -223,7 +249,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays edited vaccine in the list once user edits the existing vaccine", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 
@@ -285,7 +317,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays error validations while adding vaccine with empty value", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 
@@ -317,7 +355,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays all the vaccines in the list except the deleted vaccine when user deletes vaccine", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 

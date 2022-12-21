@@ -115,7 +115,12 @@ function SignUpForm() {
 
             <FormControl isInvalid={Boolean(errors.dateOfBirth)}>
               <FormLabel>Date Of Birth</FormLabel>
-              <Input size="md" type="date" {...register("dateOfBirth")} />
+              <Input
+                size="md"
+                type="date"
+                {...register("dateOfBirth")}
+                max={new Date().toISOString().split("T")[0]}
+              />
 
               <FormErrorMessage>
                 {errors.dateOfBirth && errors.dateOfBirth.message?.toString()}

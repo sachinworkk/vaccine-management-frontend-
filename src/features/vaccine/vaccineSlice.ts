@@ -42,7 +42,7 @@ const initialState = {
     description: "",
     stage: "",
     isMandatory: false,
-    numberOfDoses: 0,
+    numberOfDoses: 1,
     vaccineImageUrl: "",
     file: null,
   },
@@ -64,7 +64,7 @@ const vaccineSlice = createSlice({
         description: "",
         stage: "",
         isMandatory: false,
-        numberOfDoses: 0,
+        numberOfDoses: 1,
         vaccineImageUrl: "",
         file: null,
       };

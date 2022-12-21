@@ -33,6 +33,7 @@ import { addVaccineForm } from "../../types/props";
 import { VaccinePayload } from "../../types/vaccinePayload";
 
 import { vaccineSchema } from "../../schemas/vaccineSchema";
+import { NUMBER_OF_DOSES } from "../../constants/constants";
 
 function AddVaccineForm(props: addVaccineForm) {
   const {
@@ -87,7 +88,13 @@ function AddVaccineForm(props: addVaccineForm) {
                     <FormControl isInvalid={Boolean(errors.numberOfDoses)}>
                       <FormLabel>Number of Doses</FormLabel>
 
-                      <NumberInput value={value} onChange={onChange}>
+                      <NumberInput
+                        value={value}
+                        onChange={onChange}
+                        min={NUMBER_OF_DOSES.MIN_NUMBER}
+                        max={NUMBER_OF_DOSES.MAX_NUMBER}
+                        clampValueOnBlur={false}
+                      >
                         <NumberInputField />
                         <NumberInputStepper>
                           <NumberIncrementStepper />
