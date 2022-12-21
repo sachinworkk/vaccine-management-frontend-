@@ -6,9 +6,11 @@ import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import VaccineContent from "../../components/vaccine/VaccineContent";
-
 import { renderWithProviders } from "../utils/test-utils";
+
+import VaccinePage from "../../pages/VaccinPage";
+
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 let vaccinesMockData = [
   {
@@ -32,6 +34,7 @@ const server = setupServer(
       ctx.delay(150)
     );
   }),
+
   rest.post("/vaccine", (req, res, ctx) => {
     vaccinesMockData = [
       ...vaccinesMockData,
@@ -64,6 +67,7 @@ const server = setupServer(
       ctx.delay(150)
     );
   }),
+
   rest.put("/vaccine/1", (req, res, ctx) => {
     vaccinesMockData = vaccinesMockData.map((vaccine) =>
       vaccine.id === 1
@@ -96,6 +100,17 @@ const server = setupServer(
       }),
       ctx.delay(150)
     );
+  }),
+
+  rest.delete("/vaccine/1", (req, res, ctx) => {
+    vaccinesMockData = vaccinesMockData.filter((vaccine) => vaccine.id !== 1);
+
+    return res(
+      ctx.json({
+        message: "Vaccine deleted successfully",
+      }),
+      ctx.delay(150)
+    );
   })
 );
 
@@ -113,15 +128,27 @@ describe("VaccineContent", () => {
   });
 
   it("Displays is loading when fetching vaccines", () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
-    const text = screen.queryByText("Loading...")?.innerHTML;
+    const text = screen.getByText("Loading...")?.innerHTML;
 
     expect(text).toBe("Loading...");
   });
 
   it("Displays vaccine list once vaccines are fetched", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
   });
@@ -138,13 +165,27 @@ describe("VaccineContent", () => {
       })
     );
 
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
-    expect(await screen.findByTestId("vaccine-image")).toBeInTheDocument();
+    const addVaccineImageElement = await screen.findByText("AddVaccine.svg");
+
+    expect(addVaccineImageElement?.innerHTML).toBe("AddVaccine.svg");
   });
 
   it("Displays added vaccine in the list once user adds the vaccine", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 
@@ -168,9 +209,8 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement = screen.getByTestId(
-      "vaccine-image-uploader"
-    );
+    const vaccineImageUploader: HTMLInputElement =
+      screen.getByLabelText("Vaccine Image");
 
     userEvent.type(name, "Added Vaccine");
     userEvent.type(description, "This is a test vaccine");
@@ -192,7 +232,11 @@ describe("VaccineContent", () => {
     await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
 
     await act(async () => {
-      userEvent.click(screen.getByText("Add"));
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Add",
+        })
+      );
     });
 
     await waitFor(() => expect(screen.getByText("Add")).not.toBeInTheDocument);
@@ -205,7 +249,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays edited vaccine in the list once user edits the existing vaccine", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 
@@ -227,9 +277,8 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement = screen.getByTestId(
-      "vaccine-image-uploader"
-    );
+    const vaccineImageUploader: HTMLInputElement =
+      screen.getByLabelText("Vaccine Image");
 
     userEvent.type(name, "Edited Vaccine");
     userEvent.type(description, "This is a vaccine for COVID.");
@@ -251,7 +300,11 @@ describe("VaccineContent", () => {
     await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
 
     await act(async () => {
-      userEvent.click(screen.getByText("Edit"));
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Edit",
+        })
+      );
     });
 
     await waitFor(() => expect(screen.getByText("Edit")).not.toBeInTheDocument);
@@ -264,7 +317,13 @@ describe("VaccineContent", () => {
   });
 
   it("Displays error validations while adding vaccine with empty value", async () => {
-    renderWithProviders(<VaccineContent />);
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
     expect(await screen.findByRole("grid")).toBeInTheDocument();
 
@@ -293,5 +352,107 @@ describe("VaccineContent", () => {
       "Description cannot be empty"
     );
     expect(descriptionFieldError).toBeInTheDocument();
+  });
+
+  it("Displays error validations while adding vaccine with invalid value", async () => {
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    expect(
+      await screen.findByRole("button", { name: "add-button" })
+    ).toBeInTheDocument();
+
+    userEvent.click(screen.getByRole("button", { name: "add-button" }));
+
+    const name = screen.getByRole("textbox", { name: "Full Name" });
+    const description = screen.getByRole("textbox", { name: "Description" });
+    const numberOfDoses = screen.getByRole("spinbutton", {
+      name: "Number of Doses",
+    });
+
+    const stage = screen.getByRole("combobox", {
+      name: "Stage",
+    });
+
+    const isMandatory = screen.getByRole("checkbox", {
+      name: "Is mandatory",
+    });
+
+    const vaccineImageUploader: HTMLInputElement =
+      screen.getByLabelText("Vaccine Image");
+
+    userEvent.type(name, "Sachin       ");
+    userEvent.type(description, "         ");
+    userEvent.type(numberOfDoses, "2147483649");
+    userEvent.selectOptions(stage, "Exploratory");
+    userEvent.click(isMandatory);
+
+    const fakeFile = new File(["(⌐□_□)"], "chucknorris.png", {
+      type: "image/png",
+      lastModified: Date.now(),
+    });
+
+    await act(async () => {
+      await waitFor(() => {
+        userEvent.upload(vaccineImageUploader, fakeFile);
+      });
+    });
+
+    await waitFor(() => expect(vaccineImageUploader?.files?.length).toBe(1));
+
+    await act(async () => {
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Add",
+        })
+      );
+    });
+
+    await waitFor(() => expect(screen.getByText("Add")).not.toBeInTheDocument);
+
+    const maximumNumberOfDosesError = await screen.findByText(
+      "Number of doses cannot be more than 2147483647"
+    );
+    expect(maximumNumberOfDosesError).toBeInTheDocument();
+
+    const descriptionFieldError = await screen.findByText(
+      "Description cannot be empty"
+    );
+    expect(descriptionFieldError).toBeInTheDocument();
+  });
+
+  it("Displays all the vaccines in the list except the deleted vaccine when user deletes vaccine", async () => {
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/vaccine"]}>
+        <Routes>
+          <Route path="/vaccine" element={<VaccinePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    const button = screen.getAllByRole("button", { name: "delete" })[0];
+
+    userEvent.click(button);
+
+    await waitFor(() =>
+      userEvent.click(
+        screen.getByRole("button", {
+          name: "Delete",
+        })
+      )
+    );
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+
+    expect(screen.queryByText("Edited Vaccine")).not.toBeInTheDocument();
   });
 });

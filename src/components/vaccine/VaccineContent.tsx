@@ -229,7 +229,7 @@ function VaccineContent() {
                 />
 
                 <IconButton
-                  aria-label="view detail"
+                  aria-label="delete"
                   icon={<FaTrash />}
                   size="xs"
                   variant="ghost"
@@ -246,7 +246,7 @@ function VaccineContent() {
       ></DataTable>
     ) : (
       <Center h="60vh">
-        <AddVaccineImg data-testid="vaccine-image" />
+        <AddVaccineImg />
       </Center>
     );
   };
