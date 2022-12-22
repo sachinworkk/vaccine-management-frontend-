@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { renderWithProviders } from "../utils/test-utils";
+import { renderWithProviders } from "../../utils/test-utils";
 
 import LoginPage from "../../pages/LoginPage";
 

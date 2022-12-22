@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+
 import {
+  Text,
   Box,
   Flex,
   Modal,
@@ -21,7 +24,8 @@ import "react-image-lightbox/style.css";
 import Lightbox from "react-image-lightbox";
 
 import { vaccineDetailForm } from "../../types/props";
-import { useEffect, useState } from "react";
+
+import { IMAGE_LIGHTBOX } from "../../constants/constants";
 
 function VaccineDetailForm(props: vaccineDetailForm) {
   const [isImageLightBoxOpen, setIsOpenImageLightBox] = useState(false);
@@ -79,13 +83,18 @@ function VaccineDetailForm(props: vaccineDetailForm) {
                   Vaccine Image
                 </Heading>
 
-                <Image
-                  boxSize="50"
-                  onClick={() => setIsOpenImageLightBox(true)}
-                  src={props.vaccine?.vaccineImageUrl || ""}
-                  alt="Vaccine Image"
-                  fallbackSrc="https://via.placeholder.com/400?text=Image+Not+Available"
-                />
+                <Flex flexDirection="column">
+                  <Image
+                    boxSize="50"
+                    cursor="pointer"
+                    onClick={() => setIsOpenImageLightBox(true)}
+                    src={props.vaccine?.vaccineImageUrl || ""}
+                    alt="Vaccine Image"
+                    fallbackSrc="https://via.placeholder.com/400?text=Image+Not+Available"
+                  />
+
+                  <Text>Click on the image</Text>
+                </Flex>
 
                 {isImageLightBoxOpen && (
                   <Lightbox
@@ -94,7 +103,7 @@ function VaccineDetailForm(props: vaccineDetailForm) {
                     onCloseRequest={() => setIsOpenImageLightBox(false)}
                     reactModalStyle={{
                       overlay: {
-                        zIndex: 1500000,
+                        zIndex: IMAGE_LIGHTBOX.Z_INDEX,
                       },
                     }}
                   />
