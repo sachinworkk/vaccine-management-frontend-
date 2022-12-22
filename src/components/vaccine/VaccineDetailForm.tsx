@@ -78,6 +78,7 @@ function VaccineDetailForm(props: vaccineDetailForm) {
                 <Heading as="h2" bg="gray" size="sm" p="2">
                   Vaccine Image
                 </Heading>
+
                 <Image
                   boxSize="50"
                   onClick={() => setIsOpenImageLightBox(true)}

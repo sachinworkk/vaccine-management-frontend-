@@ -152,8 +152,7 @@ function EditVaccineForm(props: editVaccineForm) {
                 ></Controller>
 
                 <FormControl>
-                  <FormLabel>Current Vaccine Image</FormLabel>
-
+                  <FormLabel> Current Vaccine Image</FormLabel>
                   <Controller
                     name="vaccineImageUrl"
                     control={control}
@@ -168,6 +167,7 @@ function EditVaccineForm(props: editVaccineForm) {
                     )}
                   ></Controller>
 
+                  <FormLabel>Upload Vaccine Image</FormLabel>
                   <Input
                     type="file"
                     variant="flushed"

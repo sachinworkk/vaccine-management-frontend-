@@ -209,8 +209,9 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement =
-      screen.getByLabelText("Vaccine Image");
+    const vaccineImageUploader: HTMLInputElement = screen.getByLabelText(
+      "Upload Vaccine Image"
+    );
 
     userEvent.type(name, "Added Vaccine");
     userEvent.type(description, "This is a test vaccine");
@@ -277,8 +278,9 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement =
-      screen.getByLabelText("Vaccine Image");
+    const vaccineImageUploader: HTMLInputElement = screen.getByLabelText(
+      "Upload Vaccine Image"
+    );
 
     userEvent.type(name, "Edited Vaccine");
     userEvent.type(description, "This is a vaccine for COVID.");
@@ -385,8 +387,9 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement =
-      screen.getByLabelText("Vaccine Image");
+    const vaccineImageUploader: HTMLInputElement = screen.getByLabelText(
+      "Upload Vaccine Image"
+    );
 
     userEvent.type(name, "Sachin       ");
     userEvent.type(description, "         ");
