@@ -16,7 +16,7 @@ import {
  * Axios instance for vaccine management.
  */
 export const http = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     "Content-Type": CONTENT_TYPE_JSON,
     Accept: CONTENT_TYPE_JSON,
@@ -27,7 +27,7 @@ export const http = axios.create({
  * Axios instance for vaccine management multiform data.
  */
 export const multipartFormHttp = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     "Content-Type": CONTENT_TYPE_MULTIFORM_DATA,
     Accept: CONTENT_TYPE_JSON,
