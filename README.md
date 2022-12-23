@@ -1,16 +1,10 @@
-
 # Vaccine Management Frontend
 
 The frontend UI for the Vaccine Mangement System.
 
-
-
-
-
-
 ## Installation
 
-Make user you have `Node.js` and `Yarn` installed.
+Make sure you have `Node.js` and `Yarn` installed.
 `Yarn` is the recommended package manager
 
 ```bash
@@ -19,14 +13,13 @@ Make user you have `Node.js` and `Yarn` installed.
   yarn install
 ```
 
-
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`REACT_APP_API_URL` 
+`REACT_APP_API_URL`
 
-##  Starting the project
+## Starting the project
 
 After succesfully adding all the dependencies start the project by
 
@@ -34,9 +27,7 @@ After succesfully adding all the dependencies start the project by
    yarn start
 ```
 
-```Note: Make sure the backend API is also running```
-
-
+`Note: Make sure the backend API is also running`
 
 ## Running Tests
 
@@ -45,4 +36,3 @@ To run tests, run the following command
 ```bash
   yarn run test
 ```
-
