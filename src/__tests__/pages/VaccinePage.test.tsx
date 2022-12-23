@@ -6,7 +6,7 @@ import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { renderWithProviders } from "../utils/test-utils";
+import { renderWithProviders } from "../../utils/test-utils";
 
 import VaccinePage from "../../pages/VaccinPage";
 
@@ -31,7 +31,7 @@ const server = setupServer(
       ctx.json({
         vaccines: vaccinesMockData,
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   }),
 
@@ -64,7 +64,7 @@ const server = setupServer(
         },
         message: "Vaccine created successfully",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   }),
 
@@ -98,7 +98,7 @@ const server = setupServer(
         },
         message: "Vaccine updated successfullyy",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   }),
 
@@ -109,7 +109,7 @@ const server = setupServer(
       ctx.json({
         message: "Vaccine deleted successfully",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   })
 );
@@ -160,7 +160,7 @@ describe("VaccineContent", () => {
           ctx.json({
             vaccines: [],
           }),
-          ctx.delay(150)
+          ctx.delay(50)
         );
       })
     );
@@ -209,8 +209,9 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement =
-      screen.getByLabelText("Vaccine Image");
+    const vaccineImageUploader: HTMLInputElement = screen.getByLabelText(
+      "Upload Vaccine Image"
+    );
 
     userEvent.type(name, "Added Vaccine");
     userEvent.type(description, "This is a test vaccine");
@@ -277,8 +278,9 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement =
-      screen.getByLabelText("Vaccine Image");
+    const vaccineImageUploader: HTMLInputElement = screen.getByLabelText(
+      "Upload Vaccine Image"
+    );
 
     userEvent.type(name, "Edited Vaccine");
     userEvent.type(description, "This is a vaccine for COVID.");
@@ -385,8 +387,9 @@ describe("VaccineContent", () => {
       name: "Is mandatory",
     });
 
-    const vaccineImageUploader: HTMLInputElement =
-      screen.getByLabelText("Vaccine Image");
+    const vaccineImageUploader: HTMLInputElement = screen.getByLabelText(
+      "Upload Vaccine Image"
+    );
 
     userEvent.type(name, "Sachin       ");
     userEvent.type(description, "         ");

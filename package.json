@@ -1,5 +1,15 @@
 {
   "name": "vaccine-management-frontend",
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/router/",
+      "<rootDir>/src/misc/",
+      "<rootDir>/src/types/",
+      "<rootDir>/src/App.tsx",
+      "<rootDir>/src/index.tsx",
+      "<rootDir>/src/services/"
+    ]
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -29,6 +39,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
     "react-icons": "^4.7.1",
+    "react-image-lightbox": "^5.1.4",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",

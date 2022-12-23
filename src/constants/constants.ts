@@ -6,3 +6,7 @@ export const NUMBER_OF_DOSES = {
 export const VACCINE_NAME = {
   MAX_NUMBER_OF_CHARACTERS: 150,
 };
+
+export const IMAGE_LIGHTBOX = {
+  Z_INDEX: 2000,
+};

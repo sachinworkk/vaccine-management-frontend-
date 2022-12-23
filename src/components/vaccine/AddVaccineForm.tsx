@@ -151,7 +151,7 @@ function AddVaccineForm(props: addVaccineForm) {
                 ></Controller>
 
                 <FormControl isInvalid={Boolean(errors.file)}>
-                  <FormLabel>Vaccine Image</FormLabel>
+                  <FormLabel>Upload Vaccine Image</FormLabel>
                   <Input
                     type="file"
                     variant="flushed"

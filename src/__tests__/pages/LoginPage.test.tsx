@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { renderWithProviders } from "../utils/test-utils";
+import { renderWithProviders } from "../../utils/test-utils";
 
 import LoginPage from "../../pages/LoginPage";
 
@@ -28,7 +28,7 @@ const server = setupServer(
         refreshToken: "axzcsadwsdfSDFSCVxcvxcvxcvesdfes",
         message: "User logged in successfully",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   })
 );

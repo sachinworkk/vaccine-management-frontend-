@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { renderWithProviders } from "../utils/test-utils";
+import { renderWithProviders } from "../../utils/test-utils";
 
 import SignUpPage from "../../pages/SignUpPage";
 
@@ -26,7 +26,7 @@ const server = setupServer(
         },
         message: "User created successfully",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   })
 );
