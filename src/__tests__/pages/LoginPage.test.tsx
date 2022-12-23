@@ -28,7 +28,7 @@ const server = setupServer(
         refreshToken: "axzcsadwsdfSDFSCVxcvxcvxcvesdfes",
         message: "User logged in successfully",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   })
 );

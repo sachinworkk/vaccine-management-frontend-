@@ -1,5 +1,15 @@
 {
   "name": "vaccine-management-frontend",
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/router/",
+      "<rootDir>/src/misc/",
+      "<rootDir>/src/types/",
+      "<rootDir>/src/App.tsx",
+      "<rootDir>/src/index.tsx",
+      "<rootDir>/src/services/"
+    ]
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {

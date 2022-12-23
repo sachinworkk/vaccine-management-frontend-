@@ -26,7 +26,7 @@ const server = setupServer(
         },
         message: "User created successfully",
       }),
-      ctx.delay(150)
+      ctx.delay(50)
     );
   })
 );
