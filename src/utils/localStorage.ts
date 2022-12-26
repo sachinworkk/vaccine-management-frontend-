@@ -1,29 +1,15 @@
 import Cookies from "js-cookie";
 
-export function saveAccessToken(accessToken: string) {
-  Cookies.set("accessToken", accessToken);
+export function saveToken(token: string, tokenType: string) {
+  Cookies.set(tokenType, token);
 }
 
-export function saveRefreshToken(refreshToken: string) {
-  Cookies.set("refreshToken", refreshToken);
-}
+export function getToken(tokenType: string) {
+  const token = Cookies.get(tokenType);
 
-export function getAccessToken(): string {
-  const accessToken = Cookies.get("accessToken");
-
-  if (!accessToken) {
+  if (!token) {
     return "";
   }
 
-  return accessToken;
-}
-
-export function getRefreshToken(): string {
-  const refreshToken = Cookies.get("refreshToken");
-
-  if (!refreshToken) {
-    return "";
-  }
-
-  return refreshToken;
+  return token;
 }

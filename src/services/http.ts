@@ -1,11 +1,6 @@
 import axios from "axios";
 
-import {
-  getAccessToken,
-  getRefreshToken,
-  saveAccessToken,
-  saveRefreshToken,
-} from "../utils/localStorage";
+import { getToken, saveToken } from "../utils/localStorage";
 
 import {
   CONTENT_TYPE_JSON,
@@ -13,26 +8,32 @@ import {
 } from "./../constants/misc";
 
 /**
+ * Get config for axios.
+ *
+ * @param contentType
+ * @returns Object
+ */
+const getConfig = (contentType: string) => {
+  return {
+    baseURL: process.env.REACT_APP_API_URL,
+    headers: {
+      "Content-Type": contentType,
+      Accept: CONTENT_TYPE_JSON,
+    },
+  };
+};
+
+/**
  * Axios instance for vaccine management.
  */
-export const http = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    "Content-Type": CONTENT_TYPE_JSON,
-    Accept: CONTENT_TYPE_JSON,
-  },
-});
+export const http = axios.create(getConfig(CONTENT_TYPE_JSON));
 
 /**
  * Axios instance for vaccine management multiform data.
  */
-export const multipartFormHttp = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    "Content-Type": CONTENT_TYPE_MULTIFORM_DATA,
-    Accept: CONTENT_TYPE_JSON,
-  },
-});
+export const multipartFormHttp = axios.create(
+  getConfig(CONTENT_TYPE_MULTIFORM_DATA)
+);
 
 /**
  * interceptors setup for that instance before sending any request
@@ -40,7 +41,7 @@ export const multipartFormHttp = axios.create({
 multipartFormHttp.interceptors.request.use(
   (config) => {
     if (config.headers)
-      config.headers["Authorization"] = "Bearer " + getAccessToken();
+      config.headers["Authorization"] = "Bearer " + getToken("accessToken");
     return config;
   },
   (error) => {
@@ -65,12 +66,12 @@ multipartFormHttp.interceptors.response.use(
         originalConfig._retry = true;
         try {
           const rs = await http.post("/token/refresh", {
-            refreshToken: getRefreshToken(),
+            refreshToken: getToken("refreshToken"),
           });
 
           const { accessToken } = rs.data;
 
-          saveAccessToken(accessToken);
+          saveToken(accessToken, "accessToken");
           return multipartFormHttp(originalConfig);
         } catch (_error) {
           return Promise.reject(_error);
@@ -81,8 +82,8 @@ multipartFormHttp.interceptors.response.use(
         err.response.data.message === "Invalid session"
       ) {
         originalConfig._retry = true;
-        saveAccessToken("");
-        saveRefreshToken("");
+        saveToken("", "accessToken");
+        saveToken("", "refreshToken");
       }
     }
     return Promise.reject(err);
@@ -90,12 +91,12 @@ multipartFormHttp.interceptors.response.use(
 );
 
 /**
- * interceptors setup for that instance before sending any request
+ * Interceptors setup for that instance before sending any request
  */
 http.interceptors.request.use(
   (config) => {
     if (config.headers)
-      config.headers["Authorization"] = "Bearer " + getAccessToken();
+      config.headers["Authorization"] = "Bearer " + getToken("accessToken");
     return config;
   },
   (error) => {
@@ -120,12 +121,12 @@ http.interceptors.response.use(
         originalConfig._retry = true;
         try {
           const rs = await http.post("/token/refresh", {
-            refreshToken: getRefreshToken(),
+            refreshToken: getToken("refreshToken"),
           });
 
           const { accessToken } = rs.data;
 
-          saveAccessToken(accessToken);
+          saveToken(accessToken, "accessToken");
           return http(originalConfig);
         } catch (_error) {
           return Promise.reject(_error);
@@ -137,8 +138,8 @@ http.interceptors.response.use(
       ) {
         originalConfig._retry = true;
 
-        saveAccessToken("");
-        saveRefreshToken("");
+        saveToken("", "accessToken");
+        saveToken("", "refreshToken");
 
         window.location.reload();
         return http(originalConfig);

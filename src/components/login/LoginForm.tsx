@@ -27,7 +27,8 @@ import { signInSchema } from "../../schemas/signInSchema";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import { loginUser, clearState } from "../../features/user/userAuthSlice";
-import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
+
+import { saveToken } from "../../utils/localStorage";
 
 function LoginForm() {
   const toast = useToast();
@@ -48,8 +49,8 @@ function LoginForm() {
     try {
       const resp = await dispatch(loginUser(data)).unwrap();
 
-      saveAccessToken(resp.accessToken);
-      saveRefreshToken(resp.refreshToken);
+      saveToken(resp.accessToken, "accessToken");
+      saveToken(resp.refreshToken, "refreshToken");
 
       navigate(routes.DASHBOARD);
     } catch (error) {
