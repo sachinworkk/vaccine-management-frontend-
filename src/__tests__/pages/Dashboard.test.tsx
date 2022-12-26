@@ -6,10 +6,12 @@ import { screen } from "@testing-library/react";
 
 import Dashboard from "../../pages/Dashboard";
 
+import * as routes from "../../routes/routes";
+
 describe("Dashboard", () => {
   it("Page not found", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/dashboard"]}>
+      <MemoryRouter initialEntries={[`${routes.DASHBOARD}`]}>
         <Routes>
           <Route path="*" element={<Dashboard />} />
         </Routes>
