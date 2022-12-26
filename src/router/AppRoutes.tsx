@@ -10,7 +10,7 @@ import SignUpPage from "../pages/SignUpPage";
 import VaccinePage from "../pages/VaccinPage";
 import PageNotFound from "../pages/PageNotFound";
 
-import Dashboard from "../components/dashboard/Dashboard";
+import Dashboard from "../pages/Dashboard";
 
 import AuthenticatedRoutes from "./AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";

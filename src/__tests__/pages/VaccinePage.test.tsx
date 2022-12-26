@@ -8,6 +8,8 @@ import userEvent from "@testing-library/user-event";
 
 import { renderWithProviders } from "../../utils/test-utils";
 
+import * as routes from "../../routes/routes";
+
 import VaccinePage from "../../pages/VaccinPage";
 
 import { MemoryRouter, Routes, Route } from "react-router-dom";
@@ -26,7 +28,7 @@ let vaccinesMockData = [
 ];
 
 const server = setupServer(
-  rest.get("/vaccine", (req, res, ctx) => {
+  rest.get(`${routes.VACCINE}`, (req, res, ctx) => {
     return res(
       ctx.json({
         vaccines: vaccinesMockData,
@@ -35,7 +37,7 @@ const server = setupServer(
     );
   }),
 
-  rest.post("/vaccine", (req, res, ctx) => {
+  rest.post(`${routes.VACCINE}`, (req, res, ctx) => {
     vaccinesMockData = [
       ...vaccinesMockData,
       {
@@ -68,7 +70,7 @@ const server = setupServer(
     );
   }),
 
-  rest.put("/vaccine/1", (req, res, ctx) => {
+  rest.put(`${routes.VACCINE}/1`, (req, res, ctx) => {
     vaccinesMockData = vaccinesMockData.map((vaccine) =>
       vaccine.id === 1
         ? {
@@ -102,7 +104,7 @@ const server = setupServer(
     );
   }),
 
-  rest.delete("/vaccine/1", (req, res, ctx) => {
+  rest.delete(`${routes.VACCINE}/1`, (req, res, ctx) => {
     vaccinesMockData = vaccinesMockData.filter((vaccine) => vaccine.id !== 1);
 
     return res(
@@ -129,9 +131,9 @@ describe("VaccineContent", () => {
 
   it("Displays is loading when fetching vaccines", () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -143,9 +145,9 @@ describe("VaccineContent", () => {
 
   it("Displays vaccine list once vaccines are fetched", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -166,9 +168,9 @@ describe("VaccineContent", () => {
     );
 
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -180,9 +182,9 @@ describe("VaccineContent", () => {
 
   it("Displays added vaccine in the list once user adds the vaccine", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -251,9 +253,9 @@ describe("VaccineContent", () => {
 
   it("Displays edited vaccine in the list once user edits the existing vaccine", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -320,9 +322,9 @@ describe("VaccineContent", () => {
 
   it("Displays error validations while adding vaccine with empty value", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -358,9 +360,9 @@ describe("VaccineContent", () => {
 
   it("Displays error validations while adding vaccine with invalid value", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -433,9 +435,9 @@ describe("VaccineContent", () => {
 
   it("Displays all the vaccines in the list except the deleted vaccine when user deletes vaccine", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/vaccine"]}>
+      <MemoryRouter initialEntries={[`${routes.VACCINE}`]}>
         <Routes>
-          <Route path="/vaccine" element={<VaccinePage />} />
+          <Route path={routes.VACCINE} element={<VaccinePage />} />
         </Routes>
       </MemoryRouter>
     );

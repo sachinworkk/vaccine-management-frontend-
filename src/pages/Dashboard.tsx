@@ -1,4 +1,4 @@
-import Sidebar from "../commons/Sidebar";
+import Sidebar from "../components/commons/Sidebar";
 
 function Dashboard() {
   return (

@@ -10,10 +10,12 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { renderWithProviders } from "../../utils/test-utils";
 
+import * as routes from "../../routes/routes";
+
 import SignUpPage from "../../pages/SignUpPage";
 
 const server = setupServer(
-  rest.post("/signup", (req, res, ctx) => {
+  rest.post(`${routes.SIGN_UP}`, (req, res, ctx) => {
     return res(
       ctx.json({
         user: {
@@ -46,11 +48,11 @@ describe("SignUp Page", () => {
 
   it("Redirects to login page when user signup is successful", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/signIn", "/"]}>
+      <MemoryRouter initialEntries={[`${routes.SIGN_IN}`, `${routes.SIGN_UP}`]}>
         <Routes>
-          <Route path="/" element={<SignUpPage />} />
+          <Route path={routes.SIGN_UP} element={<SignUpPage />} />
           <Route
-            path="/signIn"
+            path={routes.SIGN_IN}
             element={
               <>
                 <h1>Welcome to login page</h1>
@@ -94,11 +96,11 @@ describe("SignUp Page", () => {
 
   it("Displays validation errors when empty value was added", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/signIn", "/"]}>
+      <MemoryRouter initialEntries={[`${routes.SIGN_IN}`, `${routes.SIGN_UP}`]}>
         <Routes>
-          <Route path="/" element={<SignUpPage />} />
+          <Route path={routes.SIGN_UP} element={<SignUpPage />} />
           <Route
-            path="/signIn"
+            path={routes.SIGN_IN}
             element={
               <>
                 <h1>Welcome to login page</h1>
@@ -143,11 +145,11 @@ describe("SignUp Page", () => {
 
   it("Displays validation errors when invalid value was provided", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/signIn", "/"]}>
+      <MemoryRouter initialEntries={[`${routes.SIGN_IN}`, `${routes.SIGN_UP}`]}>
         <Routes>
-          <Route path="/" element={<SignUpPage />} />
+          <Route path={routes.SIGN_UP} element={<SignUpPage />} />
           <Route
-            path="/signIn"
+            path={routes.SIGN_IN}
             element={
               <>
                 <h1>Welcome to login page</h1>

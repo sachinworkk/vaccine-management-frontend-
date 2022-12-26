@@ -10,10 +10,12 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { renderWithProviders } from "../../utils/test-utils";
 
+import * as routes from "../../routes/routes";
+
 import LoginPage from "../../pages/LoginPage";
 
 const server = setupServer(
-  rest.post("/signin", (req, res, ctx) => {
+  rest.post(`${routes.SIGN_IN}`, (req, res, ctx) => {
     return res(
       ctx.json({
         user: {
@@ -48,11 +50,13 @@ describe("LoginForm", () => {
 
   it("Redirects to dashboard page when user login is successfully", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/dashboard", "/"]}>
+      <MemoryRouter
+        initialEntries={[`${routes.DASHBOARD}`, `${routes.SIGN_IN}`]}
+      >
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path={routes.SIGN_IN} element={<LoginPage />} />
           <Route
-            path="/dashboard"
+            path={routes.DASHBOARD}
             element={
               <>
                 <h1>Welcome to dashboard page</h1>
@@ -80,11 +84,13 @@ describe("LoginForm", () => {
 
   it("Displays validation errors when empty value was added", async () => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/dashboard", "/"]}>
+      <MemoryRouter
+        initialEntries={[`${routes.DASHBOARD}`, `${routes.SIGN_IN}`]}
+      >
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path={routes.SIGN_IN} element={<LoginPage />} />
           <Route
-            path="/dashboard"
+            path={routes.DASHBOARD}
             element={
               <>
                 <h1>Welcome to dashboard page</h1>

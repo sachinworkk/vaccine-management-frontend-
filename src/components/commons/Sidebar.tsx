@@ -34,7 +34,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 
 import { signOutUser } from "../../features/user/userAuthSlice";
 
-import { saveAccessToken, saveRefreshToken } from "../../utils/localStorage";
+import { saveToken } from "../../utils/localStorage";
 
 interface LinkItemProps {
   path: string;
@@ -55,8 +55,8 @@ export default function Sidebar({ children }: { children: ReactNode }) {
 
   const onSignOutUser = () => {
     dispatch(signOutUser({})).then(() => {
-      saveAccessToken("");
-      saveRefreshToken("");
+      saveToken("", "accessToken");
+      saveToken("", "refreshToken");
 
       navigate(routes.SIGN_IN);
     });
