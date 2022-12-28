@@ -9,9 +9,6 @@ import {
 
 /**
  * Get config for axios.
- *
- * @param contentType
- * @returns Object
  */
 const getConfig = (contentType: string) => {
   return {
@@ -36,115 +33,75 @@ export const multipartFormHttp = axios.create(
 );
 
 /**
- * interceptors setup for that instance before sending any request
+ * Config header.
  */
-multipartFormHttp.interceptors.request.use(
-  (config) => {
-    if (config.headers)
-      config.headers["Authorization"] = "Bearer " + getToken("accessToken");
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-multipartFormHttp.interceptors.response.use(
-  (res) => {
-    return res;
-  },
-  async (err) => {
-    const originalConfig = err.config;
-    if (err.response) {
-      //got error response
-      if (
-        err.response.status === 401 &&
-        !originalConfig._retry &&
-        err.response.data.details === "Invalid session"
-      ) {
-        // Access Token was expired
-        originalConfig._retry = true;
-        try {
-          const rs = await http.post("/token/refresh", {
-            refreshToken: getToken("refreshToken"),
-          });
-
-          const { accessToken } = rs.data;
-
-          saveToken(accessToken, "accessToken");
-          return multipartFormHttp(originalConfig);
-        } catch (_error) {
-          return Promise.reject(_error);
-        }
-      } else if (
-        err.response.status === 401 &&
-        !originalConfig._retry &&
-        err.response.data.message === "Invalid session"
-      ) {
-        originalConfig._retry = true;
-        saveToken("", "accessToken");
-        saveToken("", "refreshToken");
-      }
-    }
-    return Promise.reject(err);
-  }
-);
+const configHeader = (config: any) => {
+  if (config.headers)
+    config.headers["Authorization"] = "Bearer " + getToken("accessToken");
+  return config;
+};
 
 /**
- * Interceptors setup for that instance before sending any request
+ * Error handler.
  */
-http.interceptors.request.use(
-  (config) => {
-    if (config.headers)
-      config.headers["Authorization"] = "Bearer " + getToken("accessToken");
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+const errorHandler = (error: any) => {
+  return Promise.reject(error);
+};
 
-http.interceptors.response.use(
-  (res) => {
-    return res;
-  },
-  async (err) => {
-    const originalConfig = err.config;
-    if (err.response) {
-      //got error response
-      if (
-        err.response.status === 401 &&
-        !originalConfig._retry &&
-        err.response.data.details === "Invalid session"
-      ) {
-        // Access Token was expired
-        originalConfig._retry = true;
-        try {
-          const rs = await http.post("/token/refresh", {
-            refreshToken: getToken("refreshToken"),
-          });
+/**
+ * Handle retry.
+ */
+const handleRetry = async (err: any) => {
+  const originalConfig = err.config;
+  if (err.response) {
+    //got error response
+    if (
+      err.response.status === 401 &&
+      !originalConfig._retry &&
+      err.response.data.details === "Invalid session"
+    ) {
+      // Access Token was expired
+      originalConfig._retry = true;
+      try {
+        const rs = await http.post("/token/refresh", {
+          refreshToken: getToken("refreshToken"),
+        });
 
-          const { accessToken } = rs.data;
+        const { accessToken } = rs.data;
 
-          saveToken(accessToken, "accessToken");
-          return http(originalConfig);
-        } catch (_error) {
-          return Promise.reject(_error);
-        }
-      } else if (
-        err.response.status === 401 &&
-        !originalConfig._retry &&
-        err.response.data.message === "Invalid session"
-      ) {
-        originalConfig._retry = true;
-
-        saveToken("", "accessToken");
-        saveToken("", "refreshToken");
-
-        window.location.reload();
-        return http(originalConfig);
+        saveToken(accessToken, "accessToken");
+        return multipartFormHttp(originalConfig);
+      } catch (_error) {
+        return Promise.reject(_error);
       }
+    } else if (
+      err.response.status === 401 &&
+      !originalConfig._retry &&
+      err.response.data.message === "Invalid session"
+    ) {
+      originalConfig._retry = true;
+      saveToken("", "accessToken");
+      saveToken("", "refreshToken");
     }
-    return Promise.reject(err);
   }
-);
+  return Promise.reject(err);
+};
+
+/**
+ * Response handler.
+ */
+const resHandler = (res: any) => {
+  return res;
+};
+
+/**
+ * Interceptors setup for that instance before sending any request for multiform data.
+ */
+multipartFormHttp.interceptors.request.use(configHeader, errorHandler);
+multipartFormHttp.interceptors.response.use(resHandler, handleRetry);
+
+/**
+ * Interceptors setup for that instance before sending any request for http data.
+ */
+http.interceptors.request.use(configHeader, errorHandler);
+http.interceptors.response.use(resHandler, handleRetry);
