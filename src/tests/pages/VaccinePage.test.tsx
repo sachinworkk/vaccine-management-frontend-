@@ -6,7 +6,7 @@ import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { renderWithProviders } from "../../utils/test-utils";
+import { renderWithProviders } from "../test-utils";
 
 import * as routes from "../../routes/routes";
 

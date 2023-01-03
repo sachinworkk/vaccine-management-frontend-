@@ -1,6 +1,6 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { renderWithProviders } from "../../utils/test-utils";
+import { renderWithProviders } from "../test-utils";
 
 import { screen } from "@testing-library/react";
 
